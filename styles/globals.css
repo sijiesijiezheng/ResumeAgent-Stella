@@ -85,4 +85,71 @@ button:hover {
   color: #2563eb;
   text-decoration: none;
 }
+/* === Resume Agent 界面微调补丁 vFinal === */
+
+/* 去掉顶部多余导航栏背景和边框 */
+.nav {
+  display: none;
+}
+
+/* 全局背景更柔和 */
+body {
+  background-color: #f7f9fc;
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  color: #222;
+}
+
+/* 中心卡片样式优化 */
+.container {
+  max-width: 720px;
+  margin: 80px auto;
+  background: #fff;
+  padding: 48px 64px;
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+}
+
+/* 主标题 */
+h1 {
+  text-align: center;
+  color: #2563eb;
+  font-size: 1.8rem;
+  margin-bottom: 16px;
+}
+
+/* 副标题文字 */
+p {
+  text-align: center;
+  color: #555;
+  line-height: 1.6;
+  margin-bottom: 40px;
+}
+
+/* 蓝色主按钮 */
+.btn.primary {
+  display: block;
+  width: fit-content;
+  margin: 0 auto;
+  background-color: #2563eb;
+  color: #fff;
+  text-decoration: none;
+  padding: 12px 28px;
+  border-radius: 8px;
+  font-weight: 600;
+  transition: background 0.3s ease;
+}
+
+.btn.primary:hover {
+  background-color: #1e40af;
+}
+
+/* 链接颜色统一 */
+a {
+  color: #2563eb;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
 
