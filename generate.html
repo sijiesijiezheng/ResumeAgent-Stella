@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Resume Agent｜生成智能简历</title>
+  <link rel="stylesheet" href="./styles/globals.css" />
+</head>
+<body>
+  <div class="container">
+    <h1>生成你的智能简历</h1>
+    <p>填写以下信息，系统将自动为你生成个性化简历。</p>
+
+    <form id="resumeForm">
+      <label>姓名：</label>
+      <input type="text" id="name" placeholder="请输入你的姓名" required />
+
+      <label>学校：</label>
+      <input type="text" id="school" placeholder="请输入学校名称" required />
+
+      <label>专业：</label>
+      <input type="text" id="major" placeholder="请输入专业" required />
+
+      <label>申请岗位：</label>
+      <input type="text" id="job" placeholder="请输入岗位，如‘市场实习生’" required />
+
+      <label>技能关键词：</label>
+      <input type="text" id="skills" placeholder="例如：数据分析 / Excel / 文案" />
+
+      <label>补充说明：</label>
+      <textarea id="extra" placeholder="可填写校内经历、荣誉、特长等"></textarea>
+
+      <label>激活码：</label>
+      <input type="text" id="activationCode" placeholder="请输入激活码" required />
+
+      <button type="submit" id="generateBtn">生成简历</button>
+    </form>
+
+    <div id="loading" style="display:none;">AI 正在生成，请稍候...</div>
+    <div id="result" class="result"></div>
+
+    <div class="btn-group">
+      <button id="copyBtn" disabled>复制内容</button>
+      <button id="pdfBtn" disabled>导出 PDF</button>
+      <button id="wordBtn" disabled>导出 Word</button>
+    </div>
+
+    <p class="back-link"><a href="index.html">返回首页</a></p>
+  </div>
+  <script src="./config.js"></script>
+  <script src="./script.js"></script>
+</body>
+</html>

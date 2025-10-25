@@ -1,0 +1,1 @@
+const API_URL = "https://resume-api.sijiesijiezheng.workers.dev/";
