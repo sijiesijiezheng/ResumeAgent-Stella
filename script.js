@@ -1,79 +1,99 @@
-import { API_URL } from "./config.js";
+// ==== Resume Agent vFinal — script.js (六字段版) ====
+// 依赖：config.js 中已定义全局常量 API_URL
+// 激活码白名单（可在此增删）
+const VALID_KEYS = ["RA2025", "SISDEV", "TRYAGENT"];
 
-const validKeys = ["RA2025", "SISDEV", "TRYAGENT"];
-const form = document.getElementById("resumeForm");
-const resultDiv = document.getElementById("result");
-const loadingDiv = document.getElementById("loading");
-const copyBtn = document.getElementById("copyBtn");
-const pdfBtn = document.getElementById("pdfBtn");
-const wordBtn = document.getElementById("wordBtn");
+// 元素引用
+const form     = document.getElementById("resumeForm");
+const resultEl = document.getElementById("result");
+const loading  = document.getElementById("loading");
+const copyBtn  = document.getElementById("copyBtn");
+const pdfBtn   = document.getElementById("pdfBtn");
+const wordBtn  = document.getElementById("wordBtn");
 
+// 工具：启用/禁用导出按钮
+function setExportEnabled(enabled) {
+  copyBtn.disabled = !enabled;
+  pdfBtn.disabled  = !enabled;
+  wordBtn.disabled = !enabled;
+}
+setExportEnabled(false);
+
+// 生成简历
 form.addEventListener("submit", async (e) => {
   e.preventDefault();
-  resultDiv.innerHTML = "";
-  loadingDiv.style.display = "block";
+  setExportEnabled(false);
+  resultEl.innerHTML = "";
+  loading.style.display = "block";
 
-  const code = document.getElementById("activationCode").value.trim();
-  if (!validKeys.includes(code)) {
-    loadingDiv.style.display = "none";
+  // 读取表单
+  const code   = document.getElementById("activationCode")?.value.trim();
+  const name   = document.getElementById("name")?.value.trim();
+  const school = document.getElementById("school")?.value.trim();
+  const major  = document.getElementById("major")?.value.trim();
+  const job    = document.getElementById("job")?.value.trim();
+  const skills = document.getElementById("skills")?.value.trim();
+  const extra  = document.getElementById("extra")?.value.trim();
+
+  // 激活码校验
+  if (!VALID_KEYS.includes(code)) {
+    loading.style.display = "none";
     alert("激活码无效，请联系管理员获取授权。");
     return;
   }
 
-  const payload = {
-    name: document.getElementById("name").value.trim(),
-    school: document.getElementById("school").value.trim(),
-    major: document.getElementById("major").value.trim(),
-    job: document.getElementById("job").value.trim(),
-    skills: document.getElementById("skills").value.trim(),
-    extra: document.getElementById("extra").value.trim(),
-  };
+  // 组装发给 Worker 的 payload（与你的后端字段一致）
+  const payload = { name, school, major, job, skills, extra };
 
   try {
-    const response = await fetch(API_URL, {
+    const resp = await fetch(API_URL, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload),
     });
 
-    const data = await response.json();
-    loadingDiv.style.display = "none";
+    const data = await resp.json();
+    loading.style.display = "none";
 
-    if (data.result) {
-      resultDiv.innerHTML = `<h2>生成结果</h2><div class="resume-content">${data.result}</div>`;
-      copyBtn.disabled = false;
-      pdfBtn.disabled = false;
-      wordBtn.disabled = false;
+    // 兼容两种返回结构：
+    // A) { result: "...markdown..." }  —— 你的 Cloudflare Worker 当前版本
+    // B) { success: true, output: "..." } —— 旧版脚本的预期
+    const content = data?.result ?? data?.output ?? "";
+    if (content) {
+      resultEl.innerHTML = `<h2>生成结果</h2><div class="resume-content">${content}</div>`;
+      setExportEnabled(true);
     } else {
-      resultDiv.innerHTML = `<p>生成失败，请稍后再试。</p>`;
+      resultEl.innerHTML = `<p>生成失败：后端未返回内容。</p>`;
     }
-  } catch (error) {
-    loadingDiv.style.display = "none";
-    resultDiv.innerHTML = `<p>发生错误：${error.message}</p>`;
+  } catch (err) {
+    loading.style.display = "none";
+    resultEl.innerHTML = `<p>请求出错：${err.message}</p>`;
   }
 });
 
-// --- 导出与复制功能 ---
-copyBtn.addEventListener("click", () => {
-  const text = document.querySelector(".resume-content")?.innerText;
-  if (text) navigator.clipboard.writeText(text);
-  alert("内容已复制到剪贴板！");
+// 复制
+copyBtn.addEventListener("click", async () => {
+  const text = document.querySelector(".resume-content")?.innerText || "";
+  await navigator.clipboard.writeText(text);
+  alert("内容已复制到剪贴板");
 });
 
+// 导出 PDF（简易文本版）
 pdfBtn.addEventListener("click", () => {
-  const text = document.querySelector(".resume-content")?.innerText;
+  const text = document.querySelector(".resume-content")?.innerText || "";
   const blob = new Blob([text], { type: "application/pdf" });
-  const a = document.createElement("a");
-  a.href = URL.createObjectURL(blob);
-  a.download = "简历.pdf";
-  a.click();
+  const url  = URL.createObjectURL(blob);
+  const a    = document.createElement("a");
+  a.href = url; a.download = "简历.pdf"; a.click();
+  URL.revokeObjectURL(url);
 });
 
+// 导出 Word
 wordBtn.addEventListener("click", () => {
-  const text = document.querySelector(".resume-content")?.innerText;
-  const blob = new Blob([text], { type: "application/msword" });
-  const a = document.createElement("a");
-  a.href = URL.createObjectURL(blob);
-  a.download = "简历.doc";
-  a.click();
+  const text = document.querySelector(".resume-content")?.innerText || "";
+  const blob = new Blob(["\ufeff" + text], { type: "application/msword" });
+  const url  = URL.createObjectURL(blob);
+  const a    = document.createElement("a");
+  a.href = url; a.download = "简历.doc"; a.click();
+  URL.revokeObjectURL(url);
 });
