@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>生成简历 - Resume Agent</title>
+  <link rel="stylesheet" href="./styles/globals.css" />
+</head>
+<body>
+  <h1>生成我的简历</h1>
+  <form id="resumeForm">
+    <label>姓名</label><input type="text" id="name" placeholder="请输入姓名" />
+    <label>学校</label><input type="text" id="school" placeholder="请输入学校名称" />
+    <label>专业</label><input type="text" id="major" placeholder="请输入专业名称" />
+    <label>申请岗位</label><input type="text" id="job" placeholder="如 品牌营销实习生" />
+    <label>技能关键词（可选）</label><input type="text" id="skills" placeholder="数据分析、策划、PS" />
+    <label>补充说明（可选）</label><textarea id="extra" placeholder="可填写更多个人信息..."></textarea>
+    <button type="submit">生成简历</button>
+  </form>
+  <div id="output"></div>
+  <script src="./config.js"></script>
+  <script src="./script.js"></script>
+</body>
+</html>
