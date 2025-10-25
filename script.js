@@ -35,13 +35,7 @@ form.addEventListener("submit", async (e) => {
   const skills = document.getElementById("skills")?.value.trim();
   const extra  = document.getElementById("extra")?.value.trim();
 
-  // 激活码校验
-  if (!VALID_KEYS.includes(code)) {
-    loading.style.display = "none";
-    alert("激活码无效，请联系管理员获取授权。");
-    return;
-  }
-
+ 
   // 组装发给 Worker 的 payload（与你的后端字段一致）
   const payload = { name, school, major, job, skills, extra };
 
