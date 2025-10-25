@@ -72,15 +72,21 @@ copyBtn.addEventListener("click", async () => {
   alert("内容已复制到剪贴板");
 });
 
-// 导出 PDF（简易文本版）
+// === 临时导出方案：将生成内容导出为 .txt 文件 ===
 pdfBtn.addEventListener("click", () => {
-  const text = document.querySelector(".resume-content")?.innerText || "";
-  const blob = new Blob([text], { type: "application/pdf" });
-  const url  = URL.createObjectURL(blob);
-  const a    = document.createElement("a");
-  a.href = url; a.download = "简历.pdf"; a.click();
-  URL.revokeObjectURL(url);
+  const content = document.getElementById("result").innerText.trim();
+  if (!content) {
+    alert("请先生成简历内容再导出。");
+    return;
+  }
+
+  const blob = new Blob([content], { type: "text/plain;charset=utf-8" });
+  const link = document.createElement("a");
+  link.href = URL.createObjectURL(blob);
+  link.download = "简历.txt";
+  link.click();
 });
+
 
 // 导出 Word
 wordBtn.addEventListener("click", () => {
