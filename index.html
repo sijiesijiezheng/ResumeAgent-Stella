@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>生成简历 - Resume Agent</title>
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script> 
+  <style>
+    body {
+      font-family: "Microsoft YaHei", sans-serif;
+      background: #f9fafb;
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      max-width: 600px;
+      margin: 60px auto;
+      background: white;
+      border-radius: 12px;
+      padding: 30px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+      word-wrap: break-word;
+      white-space: pre-wrap;
+    }
+    h2 {
+      text-align: center;
+      color: #1d4ed8;
+    }
+    label {
+      display: block;
+      margin-top: 15px;
+      font-weight: 600;
+      color: #374151;
+    }
+    input, textarea {
+      width: 100%;
+      margin-top: 5px;
+      padding: 10px;
+      border: 1px solid #d1d5db;
+      border-radius: 6px;
+      font-size: 15px;
+    }
+    button {
+      width: 100%;
+      background-color: #2563eb;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      padding: 12px;
+      margin-top: 20px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #1e40af;
+    }
+    .secondary-btn {
+      width: 48%;
+      margin-top: 10px;
+      background: #e5e7eb;
+      color: #111827;
+    }
+    .secondary-btn:hover {
+      background: #d1d5db;
+    }
+    .loading {
+      text-align: center;
+      color: #6b7280;
+      margin-top: 15px;
+    }
+    #output {
+      margin-top: 20px;
+      line-height: 1.7;
+    }
+    .action-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 4%;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <h2>生成我的简历</h2>
+
+    <label>姓名</label>
+    <input id="name" placeholder="请输入姓名" />
+
+    <label>学校</label>
+    <input id="school" placeholder="请输入学校名称" />
+
+    <label>专业</label>
+    <input id="major" placeholder="请输入专业名称" />
+
+    <label>申请岗位</label>
+    <input id="position" placeholder="如 品牌营销实习生" />
+
+    <label>技能关键词（可选）</label>
+    <input id="skills" placeholder="如 Excel, 市场分析, 视觉表达" />
+
+    <label>补充说明（可选）</label>
+    <textarea id="extra" placeholder="可补充项目、比赛经历等信息"></textarea>
+
+    <button id="generate">生成完整简历</button>
+
+    <div class="loading" id="loading" style="display:none;">正在生成，请稍候...</div>
+    <div id="output"></div>
+
+    <div class="action-row">
+      <button class="secondary-btn" id="exportPDF">导出 PDF</button>
+      <button class="secondary-btn" id="exportWord">导出 Word</button>
+    </div>
+
+    <p id="quotaInfo" style="margin-top:15px; text-align:center; color:#6b7280;">今日剩余额度：5 次</p>
+  </div>
+
+  <!-- 设置 Key 弹窗（可选） -->
+  <div id="settingsModal" style="display:none;">
+    <div class="modal-content">
+      <span id="closeModal" style="cursor:pointer;">&times;</span>
+      <h3>Key 设置</h3>
+      <input id="newKey" placeholder="输入新的 API 地址或 Key" />
+      <button id="saveKey">保存</button>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
