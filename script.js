@@ -33,6 +33,7 @@ form.addEventListener("submit", async (e) => {
   const major  = document.getElementById("major")?.value.trim();
   const job    = document.getElementById("job")?.value.trim();
   const skills = document.getElementById("skills")?.value.trim();
+  const experience = document.getElementById("experience").value;
   const extra  = document.getElementById("extra")?.value.trim();
 
  
