@@ -21,6 +21,7 @@ export async function onRequest(context) {
   const major = body.major || "";
   const job = body.job || body.position || "";
   const skills = body.skills || "";
+  const experience = body.experience || "";
   const extra = body.extra || "";
 
   const apiKey = env.ZHIPU_API_KEY;
