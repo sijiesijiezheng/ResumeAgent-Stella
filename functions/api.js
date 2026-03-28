@@ -89,7 +89,7 @@ ${industryHints}
 
 5. 如果用户提供的经历较少，可以做适度补充，但必须贴合学生背景，避免夸大。
 
-6. 严禁输出任何 ``` 或 "markdown"、"md" 等文字。
+6. 严禁输出任何代码围栏，严禁输出 markdown 或 md 等说明性文字。
 
   try {
     const aiResp = await fetch(apiURL, {
