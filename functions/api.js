@@ -60,6 +60,7 @@ export async function onRequest(context) {
 - 专业：${major}
 - 申请岗位：${job}
 - 技能关键词：${skills}
+- 相关经历：${experience}
 - 补充说明：${extra}
 
 ${industryHints}
@@ -84,8 +85,11 @@ ${industryHints}
    - 输出5个开放式问题；
    - 问题与学生的实习经历或技能相关。
 
-4. 严禁输出任何 \`\`\` 或 "markdown"、"md" 等文字。
-`;
+4. 优先基于用户提供的“相关经历”进行扩写，严禁凭空编造完全不存在的经历。
+
+5. 如果用户提供的经历较少，可以做适度补充，但必须贴合学生背景，避免夸大。
+
+6. 严禁输出任何 ``` 或 "markdown"、"md" 等文字。
 
   try {
     const aiResp = await fetch(apiURL, {
