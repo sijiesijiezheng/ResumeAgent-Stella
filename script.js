@@ -32,13 +32,14 @@ form.addEventListener("submit", async (e) => {
   const school = document.getElementById("school")?.value.trim();
   const major  = document.getElementById("major")?.value.trim();
   const job    = document.getElementById("job")?.value.trim();
-  const skills = document.getElementById("skills")?.value.trim();
-  const experience = document.getElementById("experience").value;
-  const extra  = document.getElementById("extra")?.value.trim();
   const style = document.getElementById("style").value;
+  const skills = document.getElementById("skills")?.value.trim();
+  const experience = document.getElementById("experience")?.value.trim();
+  const extra  = document.getElementById("extra")?.value.trim();
+  
  
   // 组装发给 Worker 的 payload（与你的后端字段一致）
-  const payload = { name, school, major, job, skills, experience, extra };
+  const payload = { name, school, major, job, style, skills, experience, extra };
   try {
     const resp = await fetch(API_URL, {
       method: "POST",
