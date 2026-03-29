@@ -20,6 +20,7 @@ export async function onRequest(context) {
   const school = body.school || "";
   const major = body.major || "";
   const job = body.job || body.position || "";
+  const style = body.style || "normal";
   const skills = body.skills || "";
   const experience = body.experience || "";
   const extra = body.extra || "";
