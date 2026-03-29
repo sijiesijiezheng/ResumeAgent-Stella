@@ -35,7 +35,7 @@ form.addEventListener("submit", async (e) => {
   const skills = document.getElementById("skills")?.value.trim();
   const experience = document.getElementById("experience").value;
   const extra  = document.getElementById("extra")?.value.trim();
-
+  const style = document.getElementById("style").value;
  
   // 组装发给 Worker 的 payload（与你的后端字段一致）
   const payload = { name, school, major, job, skills, experience, extra };
