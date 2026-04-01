@@ -158,6 +158,8 @@ export async function onRequest(context) {
 最终目标：
 生成一版岗位相关性明显更强、但仍真实可信的定制简历
 `;
+
+  const commonWorkflowBlock = `
 ==============================
 Step 1：生成初版简历（Generator）
 ==============================
