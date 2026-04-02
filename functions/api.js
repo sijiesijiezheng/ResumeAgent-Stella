@@ -173,16 +173,66 @@ ${skills}
   const skillResult =
     skillData.choices?.[0]?.message?.content || "";
 
+// =========================
+// 🧩 Step4：简历整合
+// =========================
+
+const finalPrompt = `
+你的任务是：将用户信息 + 经历 + 技能，整合为一份简历片段
+
+【基础信息】
+姓名：${body.name}
+学校：${body.school}
+专业：${body.major}
+岗位：${body.job}
+
+【经历描述】
+${experienceResult}
+
+【技能模块】
+${skillResult}
+
+【输出要求】
+
+1. 必须包含：姓名 / 学校 / 专业 / 求职岗位
+2. 按简历格式输出
+3. 不允许编造信息
+4. 不要新增经历
+
+直接输出完整简历
+`;
+
+const finalResumeResp = await fetch(apiURL, {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json",
+    "Authorization": `Bearer ${apiKey}`,
+  },
+  body: JSON.stringify({
+    model: "glm-4-flash",
+    messages: [
+      { role: "system", content: "你是简历整合助手" },
+      { role: "user", content: finalPrompt },
+    ],
+    temperature: 0.5,
+  }),
+});
+
+const finalResumeData = await finalResumeResp.json();
+const finalResume =
+  finalResumeData.choices?.[0]?.message?.content || "";
+
+
   // =========================
   // ✅ 最终返回
   // =========================
 
-  return new Response(
-    JSON.stringify({
-      experience: experienceResult.trim(),
-      skills: skillResult.trim(),
-      structure: structureText.trim(), // 可留可删（调试用）
-    }),
+ return new Response(
+  JSON.stringify({
+    resume: finalResume.trim(),     // ⭐ 新增
+    experience: experienceResult.trim(),
+    skills: skillResult.trim(),
+  }),
     {
       headers: {
         "Content-Type": "application/json",
