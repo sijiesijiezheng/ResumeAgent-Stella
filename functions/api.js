@@ -16,13 +16,15 @@ export async function onRequest(context) {
   }
 
   const body = await request.json();
+
   const experience = body.experience || "";
+  const skills = body.skills || "";
 
   const apiKey = env.ZHIPU_API_KEY;
   const apiURL = "https://open.bigmodel.cn/api/paas/v4/chat/completions";
 
   // =========================
-  // 🧩 Prompt1：结构提取
+  // 🧩 Step1：经历结构提取
   // =========================
 
   const structurePrompt = `
@@ -56,7 +58,6 @@ export async function onRequest(context) {
 ${experience}
 `;
 
-  // 调用 Step1
   const structureResp = await fetch(apiURL, {
     method: "POST",
     headers: {
@@ -78,7 +79,7 @@ ${experience}
     structureData.choices?.[0]?.message?.content || "";
 
   // =========================
-  // 🧩 Prompt2：表达生成
+  // 🧩 Step2：经历表达生成
   // =========================
 
   const expressionPrompt = `
@@ -96,37 +97,17 @@ ${structureText}
 5. 不允许出现成果数据
 6. 必须符合低经验学生表达
 
-【风格】
+【表达等级限制】
 
-优先使用：
+只允许执行层表达：
 协助 / 参与 / 完成 / 整理 / 沟通
 
 禁止：
-负责 / 主导 / 策划 / 优化
+策划 / 设计 / 优化 / 主导 / 负责
 
-直接输出，不要解释
-【表达等级限制（必须执行）】
-
-所有表达必须保持“执行层”，禁止升级为“策略层”。
-
-允许表达：
-- 协助执行
-- 参与整理
-- 完成基础任务
-- 进行沟通
-
-禁止表达：
-- 策划
-- 设计
-- 优化
-- 复盘
-- 主导
-
-如果输入中没有明确“策划/设计”：
-绝对不允许出现这些词。
+直接输出
 `;
 
-  // 调用 Step2
   const finalResp = await fetch(apiURL, {
     method: "POST",
     headers: {
@@ -144,14 +125,63 @@ ${structureText}
   });
 
   const finalData = await finalResp.json();
-  let result = finalData.choices?.[0]?.message?.content || "";
+  const experienceResult =
+    finalData.choices?.[0]?.message?.content || "";
 
-  result = result.trim();
+  // =========================
+  // 🧩 Step3：技能模块生成
+  // =========================
+
+  const skillPrompt = `
+你的任务是：将用户提供的技能关键词，扩展为简历技能模块。
+
+【输入】
+${skills}
+
+【规则】
+
+1. 每个技能扩展为2-4个子技能
+2. 只允许基础技能
+3. 不允许新增用户未提及的技术（如Python、SQL）
+4. 不允许高级能力（如建模、策略、优化）
+
+【输出格式】
+
+技能名称：
+- 子技能1
+- 子技能2
+- 子技能3
+`;
+
+  const skillResp = await fetch(apiURL, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": `Bearer ${apiKey}`,
+    },
+    body: JSON.stringify({
+      model: "glm-4-flash",
+      messages: [
+        { role: "system", content: "你是技能模块生成助手" },
+        { role: "user", content: skillPrompt },
+      ],
+      temperature: 0.4,
+    }),
+  });
+
+  const skillData = await skillResp.json();
+  const skillResult =
+    skillData.choices?.[0]?.message?.content || "";
+
+  // =========================
+  // ✅ 最终返回
+  // =========================
 
   return new Response(
     JSON.stringify({
-      structure: structureText,
-      result: result,
+      experience: experienceResult.trim(),
+      skills: skillResult.trim(),
+      structure: structureText.trim(), // 可留可删（调试用）
     }),
     {
       headers: {
