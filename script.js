@@ -54,6 +54,7 @@ form.addEventListener("submit", async (e) => {
     // A) { result: "...markdown..." }  —— 你的 Cloudflare Worker 当前版本
     // B) { success: true, output: "..." } —— 旧版脚本的预期
     const content = data?.result ?? data?.output ?? "";
+    console.log("🔥 返回数据:", data);
     if (content) {
       resultEl.innerHTML = `<h2>生成结果</h2><div class="resume-content">${content}</div>`;
       setExportEnabled(true);
