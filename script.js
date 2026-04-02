@@ -56,28 +56,22 @@ form.addEventListener("submit", async (e) => {
     // 🧠 新结构解析（关键修复点）
     // =========================
 
-    if (data.experience || data.skills) {
+    if (data.resume) {
 
-      const html = `
-        <h2>生成结果</h2>
+  const html = `
+    <h2>生成结果</h2>
 
-        <div class="resume-block">
-          <h3>📌 经历描述</h3>
-          <pre>${data.experience || "暂无"}</pre>
-        </div>
+    <div class="resume-block">
+      <pre>${data.resume}</pre>
+    </div>
+  `;
 
-        <div class="resume-block">
-          <h3>🧩 技能模块</h3>
-          <pre>${data.skills || "暂无"}</pre>
-        </div>
-      `;
+  resultEl.innerHTML = html;
+  setExportEnabled(true);
 
-      resultEl.innerHTML = html;
-      setExportEnabled(true);
-
-    } else {
-      resultEl.innerHTML = `<p>生成失败：后端未返回有效内容。</p>`;
-    }
+} else {
+  resultEl.innerHTML = `<p>生成失败：后端未返回有效内容。</p>`;
+}
 
   } catch (err) {
     loading.style.display = "none";
