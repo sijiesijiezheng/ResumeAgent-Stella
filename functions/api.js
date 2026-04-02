@@ -218,9 +218,23 @@ const finalResumeResp = await fetch(apiURL, {
   }),
 });
 
-const finalResumeData = await finalResumeResp.json();
-const finalResume =
-  finalResumeData.choices?.[0]?.message?.content || "";
+
+
+const finalResume = `
+姓名：${body.name}
+
+教育背景：
+- ${body.school} ${body.major}
+
+求职岗位：
+- ${body.job}
+
+实习经历：
+${experienceResult}
+
+技能模块：
+${skillResult}
+`;
 
 
   // =========================
@@ -229,7 +243,7 @@ const finalResume =
 
  return new Response(
   JSON.stringify({
-    resume: finalResume.trim(),     // ⭐ 新增
+    resume: finalResume   // ⭐ 新增
     experience: experienceResult.trim(),
     skills: skillResult.trim(),
   }),
