@@ -221,18 +221,19 @@ const finalResumeResp = await fetch(apiURL, {
 
 
 const finalResume = `
+【基本信息】
 姓名：${body.name}
+学校：${body.school}
+专业：${body.major}
+求职岗位：${body.job}
 
-教育背景：
-- ${body.school} ${body.major}
+【教育背景】
+${body.school} ${body.major}
 
-求职岗位：
-- ${body.job}
+【实习经历】
+${experienceResult.split("\n").map(item => `- ${item}`).join("\n")}
 
-实习经历：
-${experienceResult}
-
-技能模块：
+【技能模块】
 ${skillResult}
 `;
 
