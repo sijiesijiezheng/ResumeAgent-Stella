@@ -56,13 +56,6 @@ button:hover {
   background-color: #1e40af;
 }
 
-.btn-group {
-  display: flex;
-  justify-content: center;
-  gap: 12px;
-  margin-top: 20px;
-}
-
 #loading {
   text-align: center;
   color: #2563eb;
@@ -71,9 +64,188 @@ button:hover {
 }
 
 .result {
-  margin-top: 24px;
-  white-space: pre-wrap;
-  line-height: 1.6;
+  margin-top: 20px;
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 625px;
+  width: min(100%, 625px);
+  white-space: normal;
+  line-height: 1.4;
+  color: #111;
+  text-align: left;
+}
+
+.result .export-ready-hint {
+  box-sizing: border-box;
+  text-align: center;
+  margin: 0 0 10px;
+  padding: 10px 14px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #0f172a;
+  background: #f1f5f9;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  line-height: 1.45;
+  letter-spacing: 0.02em;
+}
+
+/* === Generate 输出区：竖版 A4 感窄栏（约 625px 版心 + 明显左右留白）=== */
+.result > h2 {
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: #1a1a1a;
+  text-align: center;
+  margin: 0 0 8px;
+  letter-spacing: 0.05em;
+}
+
+.resume-block {
+  box-sizing: border-box;
+  max-width: 100%;
+  width: 100%;
+  margin: 0 auto;
+  padding: 20px 44px 24px;
+  background: #fff;
+  color: #000;
+  font-size: 11.5px;
+  border: 1px solid #b8bcc6;
+  border-radius: 1px;
+  /* 竖版 A4 比例（210:297）+ 足够纵向空间，避免“横条卡片”感 */
+  aspect-ratio: 210 / 297;
+  min-height: 920px;
+  box-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.06),
+    0 4px 14px rgba(0, 0, 0, 0.07),
+    0 12px 28px rgba(0, 0, 0, 0.05);
+}
+
+.resume-block section {
+  margin: 0;
+}
+
+.resume-block section + section {
+  margin-top: 11px;
+}
+
+/*
+  真实 DOM（api.js finalResume / buildResultMarkup）：
+  div.resume-block > section > h2（无 class）→「基本信息」「求职意向」等。
+  注意：.result > h2「生成结果」在 .resume-block 外，勿用 .resume-block > h2 命中模块标题。
+*/
+.resume-block section h2 {
+  font-size: 13px !important;
+  font-weight: 700 !important;
+  color: #000 !important;
+  margin: 0 0 6px !important;
+  padding-bottom: 3px !important;
+  border-bottom: 1px solid #000 !important;
+  letter-spacing: 0.03em !important;
+  line-height: 1.2 !important;
+  text-transform: none !important;
+}
+
+/* 基本信息 / 求职意向 / 教育背景：正文行（非列表） */
+.resume-block > section:nth-of-type(-n + 3) > p {
+  text-align: left;
+  color: #000;
+  margin: 0;
+  padding: 0;
+  font-size: inherit;
+  line-height: 1.34;
+}
+
+.resume-block > section:nth-of-type(1) > p + p {
+  margin-top: 1px;
+}
+
+/* 求职意向：仅一行目标岗位，不额外撑高 */
+.resume-block > section:nth-of-type(2) > p {
+  line-height: 1.34;
+  margin: 0;
+}
+
+.resume-block > section:nth-of-type(3) > p {
+  line-height: 1.34;
+}
+
+/* 实习经历：小标题（组织/项目名）突出，与下方 bullet 区分 */
+.resume-block > section:nth-of-type(4) > h3 {
+  font-size: 12px;
+  font-weight: 800;
+  color: #000;
+  margin: 1px 0 3px;
+  line-height: 1.28;
+  letter-spacing: 0.02em;
+}
+
+/* 真实 DOM：section 内 ul / li 无 class；inside + 小 padding-left 贴近文字 */
+.resume-block ul {
+  margin: 4px 0 6px 0 !important;
+  padding-left: 12px !important;
+  list-style-position: inside !important;
+  list-style-type: disc !important;
+}
+
+.resume-block li {
+  margin: 0 0 3px 0 !important;
+  margin-left: 0 !important;
+  padding: 0 !important;
+  line-height: 1.32 !important;
+  font-size: 11px !important;
+}
+
+.resume-block > section:nth-of-type(4) li {
+  color: #111 !important;
+}
+
+.resume-block > section:nth-of-type(4) li + li {
+  margin-top: 0 !important;
+}
+
+/* 技能：品类标题弱于实习经历标题 */
+.resume-block > section:nth-of-type(5) h3 {
+  font-size: 10.5px;
+  font-weight: 700;
+  color: #000;
+  margin: 6px 0 2px;
+  line-height: 1.25;
+  letter-spacing: 0.02em;
+}
+
+.resume-block > section:nth-of-type(5) h3:first-of-type {
+  margin-top: 1px;
+}
+
+.resume-block > section:nth-of-type(5) li {
+  color: #000 !important;
+}
+
+.resume-block > section:nth-of-type(5) li + li {
+  margin-top: 0 !important;
+}
+
+.resume-block p {
+  text-align: left;
+  color: #000;
+}
+
+.resume-block a {
+  color: #000;
+  text-decoration: underline;
+}
+
+@media (max-width: 640px) {
+  .result {
+    max-width: 100%;
+  }
+
+  .resume-block {
+    padding: 16px 22px 20px;
+    /* 窄屏仅按比例长高，不强制 920px 以免空白过高 */
+    min-height: 0;
+    aspect-ratio: 210 / 297;
+  }
 }
 
 .back-link {
@@ -107,6 +279,20 @@ body {
   padding: 48px 64px;
   border-radius: 16px;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+}
+
+/* Generate：浅灰“桌面” + 去掉大白卡片（由 JS 在存在 .resume-block 时为 body 加 .has-resume） */
+body.has-resume {
+  background-color: #e2e4ea;
+  padding-left: 24px;
+  padding-right: 24px;
+  box-sizing: border-box;
+}
+
+body.has-resume .container {
+  background-color: transparent !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
 }
 
 /* 主标题 */
@@ -153,6 +339,14 @@ a:hover {
   text-decoration: underline;
 }
 /* === Resume Agent generate 页面样式补丁 vFinal === */
+.form-section-heading {
+  font-size: 1.12rem;
+  font-weight: 600;
+  color: #334155;
+  text-align: center;
+  margin: 28px 0 4px;
+}
+
 form {
   background: #fff;
   padding: 40px 50px;
@@ -203,23 +397,257 @@ button[type="submit"]:hover {
   background-color: #1e40af;
 }
 
+/* 导出操作区：与结果区同宽、层级清晰 */
 .btn-group {
-  text-align: center;
-  margin-top: 40px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  margin-top: 28px;
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 625px;
+  width: 100%;
+  padding: 0 4px;
+  box-sizing: border-box;
 }
 
 .btn-group button {
-  background-color: #2563eb;
-  color: #fff;
-  border: none;
-  padding: 10px 20px;
-  margin: 6px;
+  margin: 0;
+  min-width: 118px;
+  padding: 10px 18px;
+  font-size: 14px;
+  font-weight: 600;
   border-radius: 8px;
   cursor: pointer;
-  transition: background 0.3s ease;
+  transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease,
+    opacity 0.2s ease;
 }
 
-.btn-group button:hover {
+.btn-group button:disabled {
+  opacity: 0.42;
+  cursor: not-allowed;
+}
+
+/* 主操作：导出 Word */
+.btn-group button:first-child {
+  background-color: #1d4ed8;
+  color: #fff;
+  border: 1px solid #1d4ed8;
+}
+
+.btn-group button:first-child:not(:disabled):hover {
   background-color: #1e40af;
+  border-color: #1e40af;
 }
 
+/* 次要：复制、导出文本 */
+.btn-group button:nth-child(2),
+.btn-group button:nth-child(3) {
+  background-color: #fff;
+  color: #1d4ed8;
+  border: 1px solid #bfdbfe;
+}
+
+.btn-group button:nth-child(2):not(:disabled):hover,
+.btn-group button:nth-child(3):not(:disabled):hover {
+  background-color: #eff6ff;
+  border-color: #93c5fd;
+  color: #1e40af;
+}
+
+/* === print: 仅 .resume-block 可见 + 强制黑字（避免预览只剩线框）=== */
+@page {
+  size: A4;
+  margin: 12mm;
+}
+
+@media print {
+  html {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  body {
+    background: #fff !important;
+    color: #000 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  body.has-resume {
+    background: #fff !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+
+  body.has-resume .container {
+    background: #fff !important;
+    max-width: none !important;
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  form#resumeForm,
+  #loading,
+  .btn-group,
+  .back-link,
+  .container > h1,
+  .container > p:not(.back-link),
+  #feedback,
+  .export-ready-hint,
+  .result > h2,
+  iframe {
+    display: none !important;
+  }
+
+  .container,
+  form {
+    box-shadow: none !important;
+    border-radius: 0 !important;
+    background: #fff !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  /* 全页先隐藏，再只打开 #result → .resume-block（子元素可覆盖祖先 visibility） */
+  body * {
+    visibility: hidden !important;
+  }
+
+  html,
+  body {
+    visibility: visible !important;
+  }
+
+  #result,
+  #result .resume-block,
+  #result .resume-block * {
+    visibility: visible !important;
+  }
+
+  #result {
+    display: block !important;
+    max-width: 100% !important;
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    color: #000 !important;
+    opacity: 1 !important;
+  }
+
+  #result .resume-block,
+  #result .resume-block * {
+    color: #000 !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    letter-spacing: normal !important;
+    word-spacing: normal !important;
+    text-shadow: none !important;
+    filter: none !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", Arial, sans-serif !important;
+  }
+
+  #result .resume-block *::before,
+  #result .resume-block *::after {
+    visibility: visible !important;
+    color: #000 !important;
+    opacity: 1 !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", Arial, sans-serif !important;
+  }
+
+  #result .resume-block *::marker {
+    color: #000 !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", Arial, sans-serif !important;
+  }
+
+  #result .resume-block {
+    display: block !important;
+    overflow: visible !important;
+    max-width: 100% !important;
+    width: 100% !important;
+    min-height: 0 !important;
+    aspect-ratio: unset !important;
+    padding: 0 !important;
+    border: none !important;
+    box-shadow: none !important;
+    background: #fff !important;
+    font-size: 11pt !important;
+    color: #000 !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", Arial, sans-serif !important;
+  }
+
+  #result .resume-block p {
+    margin: 0 0 4pt 0 !important;
+    text-align: left !important;
+    text-indent: 0 !important;
+  }
+
+  #result .resume-block ul {
+    list-style-position: inside !important;
+    list-style-type: disc !important;
+    padding-left: 12px !important;
+    margin: 4pt 0 6pt 0 !important;
+  }
+
+  #result .resume-block li {
+    margin: 0 0 3pt 0 !important;
+    margin-left: 0 !important;
+    padding: 0 !important;
+  }
+
+  #result .resume-block section + section {
+    margin-top: 8pt;
+  }
+
+  #result .resume-block section h2 {
+    font-size: 11.5pt !important;
+    font-weight: 700 !important;
+    color: #000 !important;
+    border-bottom: 1px solid #000 !important;
+    margin: 0 0 5pt 0 !important;
+    padding-bottom: 3pt !important;
+    letter-spacing: 0.02em !important;
+  }
+
+  #result .resume-block > section:nth-of-type(4) > h3 {
+    font-size: 10.5pt;
+    font-weight: 800 !important;
+  }
+
+  #result .resume-block > section:nth-of-type(5) h3 {
+    font-size: 9.5pt;
+    font-weight: 700 !important;
+  }
+
+  #result .resume-block > section:nth-of-type(4) li,
+  #result .resume-block > section:nth-of-type(5) li {
+    line-height: 1.28;
+    font-size: 9.5pt;
+  }
+
+  #result .resume-block > section:nth-of-type(-n + 3) > p {
+    line-height: 1.32;
+  }
+
+  button,
+  .btn.primary {
+    display: none !important;
+  }
+
+  input[type="text"],
+  textarea,
+  select {
+    display: none !important;
+  }
+}

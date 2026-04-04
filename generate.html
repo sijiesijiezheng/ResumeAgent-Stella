@@ -9,46 +9,42 @@
 <body>
   <div class="container">
     <h1>生成你的智能简历</h1>
-    <p>填写以下信息，系统将自动为你生成个性化简历。</p>
+    <p>填写简单信息，即可一键生成简历。</p>
 
-    <form id="resumeForm">
+    <h2 class="form-section-heading">填写信息</h2>
+
+    <form id="resumeForm" novalidate>
       <label>姓名：</label>
-      <input type="text" id="name" placeholder="请输入你的姓名" required />
+      <input type="text" id="name" placeholder="例如：张三（与常用称呼一致即可）" required />
 
       <label>学校：</label>
-      <input type="text" id="school" placeholder="请输入学校名称" required />
+      <input type="text" id="school" placeholder="例如：某某大学（写学校全称）" required />
 
       <label>专业：</label>
-      <input type="text" id="major" placeholder="请输入专业" required />
+      <input type="text" id="major" placeholder="例如：计算机科学与技术 / 市场营销" required />
 
       <label>申请岗位：</label>
-      <input type="text" id="job" placeholder="请输入岗位，如‘市场实习生’" required />
+      <input type="text" id="job" placeholder="例如：产品实习生、新媒体运营（写目标岗位）" required />
 
-      <label>简历风格：</label>
-      <select id="style">
-        <option value="normal">通用版</option>
-        <option value="internet">互联网风</option>
-        <option value="finance">金融风</option>
-      </select>
       <label>技能关键词：</label>
-      <input type="text" id="skills" placeholder="例如：数据分析 / Excel / 文案" />
+      <input type="text" id="skills" placeholder="例如：Excel / 公众号排版 / 活动策划（与岗位相关的关键词）" />
 
       <label>相关经历：</label>
-      <textarea id="experience" placeholder="比如：学生会、公众号、比赛、实习、项目经历等"></textarea>
+      <textarea id="experience" placeholder="写一件你做过的事（例如：整理活动资料、协助统计数据、对接参会人员）"></textarea>
 
       <label>补充说明：</label>
-      <textarea id="extra" placeholder="可填写校内经历、荣誉、特长等"></textarea>
+      <textarea id="extra" placeholder="可选：奖学金、比赛、社团职务、证书等，没有可留空"></textarea>
       
       <button type="submit" id="generateBtn">生成简历</button>
     </form>
 
-    <div id="loading" style="display:none;">AI 正在生成，请稍候...</div>
+    <div id="loading" style="display:none;">正在生成中…</div>
     <div id="result" class="result"></div>
 
     <div class="btn-group">
-      <button id="copyBtn" disabled>复制内容</button>
-      <button id="pdfBtn" disabled>导出 PDF</button>
-      <button id="wordBtn" disabled>导出 Word</button>
+      <button type="button" id="wordBtn" disabled>导出 Word</button>
+      <button type="button" id="copyBtn" disabled>复制内容</button>
+      <button type="button" id="pdfBtn" disabled>导出文本</button>
     </div>
 
     <p class="back-link"><a href="index.html">返回首页</a></p>

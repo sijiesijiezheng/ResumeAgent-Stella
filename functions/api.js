@@ -1,3 +1,78 @@
+function escapeHtml(s) {
+  return String(s ?? "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
+}
+
+/** 实习经历标题：多行时取首行，否则默认 */
+function deriveExperienceTitle(raw) {
+  const t = String(raw ?? "").trim();
+  if (!t) return "实习与项目经历";
+  const lines = t.split(/\n/).map((l) => l.trim()).filter(Boolean);
+  if (lines.length >= 2) return lines[0].slice(0, 120);
+  return "实习与项目经历";
+}
+
+/** 从模型输出的经历文本中抽出若干条 bullet 文案 */
+function bulletsFromExperienceText(text) {
+  const raw = String(text ?? "").trim();
+  if (!raw) {
+    return ["（暂无行为描述，请补充经历后重新生成）"];
+  }
+  const items = [];
+  for (const line of raw.split("\n")) {
+    const t = line.trim();
+    if (!t) continue;
+    const m = t.match(/^[-•*]\s*(.+)$/) || t.match(/^\d+[.)、]\s*(.+)$/);
+    if (m) items.push(m[1].trim());
+    else if (!items.length && t.length > 0) items.push(t);
+  }
+  return items.length ? items : [raw];
+}
+
+/** 技能模块：品类行「xxx：」+ 后续「-」行为 ul/li */
+function skillsToStructuredHtml(skillText) {
+  const lines = String(skillText ?? "")
+    .split("\n")
+    .map((l) => l.trim())
+    .filter(Boolean);
+  if (!lines.length) return "<ul><li>暂无</li></ul>";
+
+  let out = "";
+  let openUl = false;
+  const closeUl = () => {
+    if (openUl) {
+      out += "</ul>";
+      openUl = false;
+    }
+  };
+
+  for (const line of lines) {
+    const catOnly = line.match(/^(.+)[：:]\s*$/);
+    if (catOnly && !/^\s*[-•*]/.test(line)) {
+      closeUl();
+      out += `<h3>${escapeHtml(catOnly[1])}</h3><ul>`;
+      openUl = true;
+      continue;
+    }
+    const bullet = line.match(/^\s*[-•*]\s*(.+)$/);
+    if (bullet) {
+      if (!openUl) {
+        out += "<ul>";
+        openUl = true;
+      }
+      out += `<li>${escapeHtml(bullet[1])}</li>`;
+      continue;
+    }
+    closeUl();
+    out += `<p>${escapeHtml(line)}</p>`;
+  }
+  closeUl();
+  return out || `<ul><li>${escapeHtml(skillText)}</li></ul>`;
+}
+
 export async function onRequest(context) {
   const { request, env } = context;
 
@@ -173,81 +248,51 @@ ${skills}
   const skillResult =
     skillData.choices?.[0]?.message?.content || "";
 
-// =========================
-// 🧩 Step4：简历整合
-// =========================
+  const expTitle = deriveExperienceTitle(experience);
+  const expBullets = bulletsFromExperienceText(experienceResult);
+  const expListHtml = expBullets
+    .map((b) => `<li>${escapeHtml(b)}</li>`)
+    .join("");
+  const skillsInnerHtml = skillsToStructuredHtml(skillResult);
 
-const finalPrompt = `
-你的任务是：将用户信息 + 经历 + 技能，整合为一份简历片段
-
-【基础信息】
-姓名：${body.name}
-学校：${body.school}
-专业：${body.major}
-岗位：${body.job}
-
-【经历描述】
-${experienceResult}
-
-【技能模块】
-${skillResult}
-
-【输出要求】
-
-1. 必须包含：姓名 / 学校 / 专业 / 求职岗位
-2. 按简历格式输出
-3. 不允许编造信息
-4. 不要新增经历
-
-直接输出完整简历
-`;
-
-const finalResumeResp = await fetch(apiURL, {
-  method: "POST",
-  headers: {
-    "Content-Type": "application/json",
-    "Authorization": `Bearer ${apiKey}`,
-  },
-  body: JSON.stringify({
-    model: "glm-4-flash",
-    messages: [
-      { role: "system", content: "你是简历整合助手" },
-      { role: "user", content: finalPrompt },
-    ],
-    temperature: 0.5,
-  }),
-});
-
-
-
-const finalResume = `
-【基本信息】
-姓名：${body.name}
-学校：${body.school}
-专业：${body.major}
-求职岗位：${body.job}
-
-【教育背景】
-${body.school} ${body.major}
-
-【实习经历】
-${experienceResult.split("\n").map(item => `- ${item}`).join("\n")}
-
-【技能模块】
-${skillResult}
-`;
-
+  const finalResume = `
+<section>
+  <h2>基本信息</h2>
+  <p>姓名：${escapeHtml(body.name)}</p>
+  <p>学校：${escapeHtml(body.school)}</p>
+  <p>专业：${escapeHtml(body.major)}</p>
+</section>
+<section>
+  <h2>求职意向</h2>
+  <p>目标岗位：${escapeHtml(body.job)}</p>
+</section>
+<section>
+  <h2>教育背景</h2>
+  <p>${escapeHtml(body.school)} · ${escapeHtml(body.major)}</p>
+</section>
+<section>
+  <h2>实习经历</h2>
+  <h3>${escapeHtml(expTitle)}</h3>
+  <ul>
+    ${expListHtml}
+  </ul>
+</section>
+<section>
+  <h2>技能</h2>
+  ${skillsInnerHtml}
+</section>
+`.trim();
 
   // =========================
   // ✅ 最终返回
   // =========================
 
- return new Response(
-  JSON.stringify({
-    resume: finalResume   // ⭐ 新增
-    experience: experienceResult.trim(),
-    skills: skillResult.trim(),
-  }),
+  return new Response(
+    JSON.stringify({
+      resume: finalResume,
+      experience: experienceResult.trim(),
+      skills: skillResult.trim(),
+    }),
     {
       headers: {
         "Content-Type": "application/json",
