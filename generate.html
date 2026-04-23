@@ -1,183 +1,599 @@
-<!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>第一步｜开始你的简历</title>
-  <link rel="stylesheet" href="./styles/globals.css" />
-  <style>
-    .chat-container {
-      max-width: 720px;
-      margin: 40px auto;
-      padding: 20px;
-    }
-    .chat-box {
-      min-height: 400px;
-      border-radius: 12px;
-      padding: 20px;
-      background: #f9fafb;
-      overflow-y: auto;
-    }
-    .msg {
-      margin-bottom: 14px;
-      line-height: 1.6;
-    }
-    .ai {
-      color: #111;
-    }
-    .user {
-      text-align: right;
-      color: #2563eb;
-    }
-    .input-box {
-      display: flex;
-      gap: 10px;
-      margin-top: 20px;
-    }
-    .input-box input {
-      flex: 1;
-      padding: 10px;
-      border-radius: 8px;
-      border: 1px solid #ccc;
-    }
-    .input-box button {
-      padding: 10px 18px;
-      border-radius: 8px;
-      border: none;
-      background: #2563eb;
-      color: white;
-      cursor: pointer;
-    }
-  </style>
-</head>
-
-<body>
-<div class="chat-container">
-  <h1 style="text-align:center;">第一步</h1>
-  <p style="text-align:center;">不用想太多，我们一步一步来。</p>
-
-  <div id="chatBox" class="chat-box"></div>
-
-  <div class="input-box">
-    <input id="userInput" placeholder="输入你的回答..." />
-    <button id="sendBtn">发送</button>
-  </div>
-
-  <div id="loading" style="display:none;text-align:center;margin-top:10px;">
-    正在生成简历...
-  </div>
-
-  <div id="result" class="result"></div>
-</div>
-
-<script src="./config.js"></script>
-<script>
-const chatBox = document.getElementById("chatBox");
-const input = document.getElementById("userInput");
-const btn = document.getElementById("sendBtn");
-const loading = document.getElementById("loading");
-const result = document.getElementById("result");
-
-let step = 0;
-
-const answers = {
-  job: "",
-  achievement: "",
-  behavior: "",
-  skills: "",
-  upgrade: "",
-  proof: "",
-  name: "",
-  school: "",
-  major: ""
-};
-
-const questions = [
-  "我们不用一下子写好简历，就先聊一聊，好吗？你现在大概想往哪个方向试一试？（不用很确定，随便说一个就行，比如运营、产品、销售之类）",
-  
-  "大学这几年，有没有一件事，让你现在回想起来会觉得“还挺值得的”？（不一定要很厉害，哪怕只是你认真做过、从中有收获的一件事也可以）",
-  
-  "如果把刚刚那件事慢慢讲给我听，你当时大概是怎么做的？（可以从你一开始做了什么说起，中间发生了什么都可以，不用整理）",
-  
-  "在这个过程中，你觉得自己有哪几方面做得还不错？（比如沟通、整理事情、坚持、配合别人之类的，用你自己的话说就好）",
-  
-  "如果现在给你两天时间，让你补一个以后工作可能会用到的技能，你最想学什么？（可以是你一直想学但没开始的，比如数据处理、销售沟通等）",
-  
-  "如果明天你必须靠自己赚到10块钱，你会怎么做？（不用真的去做，说说你的思路就可以，我想看看你会怎么想这件事）",
-  
-  "最后我帮你整理一下，你可以告诉我你的名字、学校和专业吗？"
-];
-
-function addMessage(text, type="ai") {
-  const div = document.createElement("div");
-  div.className = "msg " + type;
-  div.innerText = text;
-  chatBox.appendChild(div);
-  chatBox.scrollTop = chatBox.scrollHeight;
-}
-
-function saveAnswer(val) {
-  if (step === 0) answers.job = val;
-  if (step === 1) answers.achievement = val;
-  if (step === 2) answers.behavior = val;
-  if (step === 3) answers.skills = val;
-  if (step === 4) answers.upgrade = val;
-  if (step === 5) answers.proof = val;
-  if (step === 6) answers.name = val;
-  if (step === 7) answers.school = val;
-  if (step === 8) answers.major = val;
-}
-
-async function generateResume() {
-  loading.style.display = "block";
-
-  const payload = {
-    name: answers.name,
-    school: answers.school,
-    major: answers.major,
-    job: answers.job,
-    skills: answers.skills + "；" + answers.upgrade,
-    experience: answers.achievement + "\n" + answers.behavior,
-    extra: answers.proof
-  };
-
-  try {
-    const resp = await fetch(API_URL, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload),
-    });
-
-    const data = await resp.json();
-    loading.style.display = "none";
-
-    result.innerHTML = "<h2>生成结果</h2><div class='resume-block'>" + data.resume + "</div>";
-  } catch (e) {
-    loading.style.display = "none";
-    result.innerHTML = "<p>生成失败，请重试</p>";
-  }
-}
-
-btn.onclick = () => {
-  const val = input.value.trim();
-  if (!val) return;
-
-  addMessage(val, "user");
-  saveAnswer(val);
-  input.value = "";
-
-  step++;
-
-  if (step < questions.length) {
-    setTimeout(() => addMessage(questions[step]), 400);
-  } else {
-    addMessage("好的，我来帮你整理一下简历...");
-    generateResume();
-  }
-};
-
-// 初始问题
-addMessage(questions[0]);
-</script>
-</body>
-</html>
+diff --git a/generate.html b/generate.html
+index 9941d10a3f469a5e4982fe7f62727310aba91174..b2115b579573b15d01cafb41c22947bc155de76d 100644
+--- a/generate.html
++++ b/generate.html
+@@ -1,183 +1,487 @@
+ <!DOCTYPE html>
+ <html lang="zh-CN">
+ <head>
+   <meta charset="UTF-8" />
+   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+-  <title>第一步｜开始你的简历</title>
++  <title>第一步｜先长出第一句话</title>
+   <link rel="stylesheet" href="./styles/globals.css" />
+   <style>
+     .chat-container {
+-      max-width: 720px;
+-      margin: 40px auto;
++      max-width: 760px;
++      margin: 32px auto;
+       padding: 20px;
+     }
++
++    .chat-title {
++      text-align: center;
++      margin-bottom: 14px;
++    }
++
++    .chat-title h1 {
++      margin: 0;
++      font-size: 26px;
++    }
++
++    .chat-title p {
++      margin: 8px 0 0;
++      color: #475569;
++      font-size: 14px;
++    }
++
+     .chat-box {
+-      min-height: 400px;
+-      border-radius: 12px;
+-      padding: 20px;
+-      background: #f9fafb;
++      min-height: 370px;
++      border-radius: 14px;
++      padding: 18px;
++      background: #f8fafc;
++      border: 1px solid #e2e8f0;
+       overflow-y: auto;
+     }
++
++    .msg-row {
++      display: flex;
++      margin-bottom: 12px;
++    }
++
++    .msg-row.ai { justify-content: flex-start; }
++    .msg-row.user { justify-content: flex-end; }
++
+     .msg {
+-      margin-bottom: 14px;
++      max-width: 85%;
++      padding: 10px 14px;
++      border-radius: 12px;
+       line-height: 1.6;
++      font-size: 14px;
++      white-space: pre-wrap;
+     }
+-    .ai {
+-      color: #111;
++
++    .msg.ai {
++      background: #ffffff;
++      border: 1px solid #dbeafe;
++      color: #0f172a;
+     }
+-    .user {
+-      text-align: right;
+-      color: #2563eb;
++
++    .msg.user {
++      background: #2563eb;
++      color: #ffffff;
+     }
+-    .input-box {
++
++    .options-wrap {
++      display: flex;
++      flex-wrap: wrap;
++      gap: 10px;
++      margin: 4px 0 12px;
++    }
++
++    .option-btn {
++      border: 1px solid #93c5fd;
++      background: #eff6ff;
++      color: #1e3a8a;
++      border-radius: 999px;
++      padding: 8px 14px;
++      cursor: pointer;
++      font-size: 13px;
++      transition: all 0.18s ease;
++    }
++
++    .option-btn:hover {
++      background: #dbeafe;
++      transform: translateY(-1px);
++    }
++
++    .sentence-actions,
++    .sentence-edit {
++      margin: 10px 0 14px;
+       display: flex;
+       gap: 10px;
+-      margin-top: 20px;
++      flex-wrap: wrap;
+     }
+-    .input-box input {
++
++    .sentence-actions button,
++    .sentence-edit button {
++      border: none;
++      border-radius: 8px;
++      padding: 8px 14px;
++      cursor: pointer;
++      font-size: 13px;
++    }
++
++    .primary-btn { background: #2563eb; color: #fff; }
++    .secondary-btn { background: #e2e8f0; color: #0f172a; }
++
++    .sentence-edit input {
+       flex: 1;
+-      padding: 10px;
++      min-width: 260px;
++      padding: 9px 12px;
+       border-radius: 8px;
+-      border: 1px solid #ccc;
++      border: 1px solid #cbd5e1;
++      font-size: 14px;
+     }
+-    .input-box button {
+-      padding: 10px 18px;
++
++    .post-form {
++      margin-top: 16px;
++      padding: 16px;
++      border-radius: 12px;
++      background: #ffffff;
++      border: 1px solid #e2e8f0;
++    }
++
++    .post-form h3 {
++      margin-top: 0;
++      margin-bottom: 10px;
++      font-size: 16px;
++      color: #0f172a;
++    }
++
++    .post-form-grid {
++      display: grid;
++      grid-template-columns: repeat(2, minmax(0, 1fr));
++      gap: 12px;
++    }
++
++    .post-form-grid .full {
++      grid-column: 1 / -1;
++    }
++
++    .post-form label {
++      display: block;
++      margin-bottom: 6px;
++      font-weight: 600;
++      font-size: 13px;
++    }
++
++    .post-form input,
++    .post-form textarea {
++      width: 100%;
++      border: 1px solid #cbd5e1;
+       border-radius: 8px;
+-      border: none;
+-      background: #2563eb;
+-      color: white;
+-      cursor: pointer;
++      padding: 9px 10px;
++      box-sizing: border-box;
++      font-size: 14px;
++    }
++
++    .post-form textarea { min-height: 86px; resize: vertical; }
++
++    @media (max-width: 640px) {
++      .post-form-grid {
++        grid-template-columns: 1fr;
++      }
+     }
+   </style>
+ </head>
+-
+ <body>
+ <div class="chat-container">
+-  <h1 style="text-align:center;">第一步</h1>
+-  <p style="text-align:center;">不用想太多，我们一步一步来。</p>
+-
+-  <div id="chatBox" class="chat-box"></div>
+-
+-  <div class="input-box">
+-    <input id="userInput" placeholder="输入你的回答..." />
+-    <button id="sendBtn">发送</button>
++  <div class="chat-title">
++    <h1>第一步：先长出第一句话</h1>
++    <p>你只需要点选项，我们先得到一句可用的经历表达。</p>
+   </div>
+ 
+-  <div id="loading" style="display:none;text-align:center;margin-top:10px;">
+-    正在生成简历...
+-  </div>
++  <div id="chatBox" class="chat-box"></div>
+ 
++  <div id="loading" style="display:none;text-align:center;margin-top:10px;">正在生成简历...</div>
+   <div id="result" class="result"></div>
+ </div>
+ 
+ <script src="./config.js"></script>
+ <script>
+ const chatBox = document.getElementById("chatBox");
+-const input = document.getElementById("userInput");
+-const btn = document.getElementById("sendBtn");
+ const loading = document.getElementById("loading");
+ const result = document.getElementById("result");
+ 
+-let step = 0;
+-
+-const answers = {
+-  job: "",
+-  achievement: "",
+-  behavior: "",
+-  skills: "",
+-  upgrade: "",
+-  proof: "",
+-  name: "",
+-  school: "",
+-  major: ""
+-};
+-
+-const questions = [
+-  "我们不用一下子写好简历，就先聊一聊，好吗？你现在大概想往哪个方向试一试？（不用很确定，随便说一个就行，比如运营、产品、销售之类）",
+-  
+-  "大学这几年，有没有一件事，让你现在回想起来会觉得“还挺值得的”？（不一定要很厉害，哪怕只是你认真做过、从中有收获的一件事也可以）",
+-  
+-  "如果把刚刚那件事慢慢讲给我听，你当时大概是怎么做的？（可以从你一开始做了什么说起，中间发生了什么都可以，不用整理）",
+-  
+-  "在这个过程中，你觉得自己有哪几方面做得还不错？（比如沟通、整理事情、坚持、配合别人之类的，用你自己的话说就好）",
+-  
+-  "如果现在给你两天时间，让你补一个以后工作可能会用到的技能，你最想学什么？（可以是你一直想学但没开始的，比如数据处理、销售沟通等）",
+-  
+-  "如果明天你必须靠自己赚到10块钱，你会怎么做？（不用真的去做，说说你的思路就可以，我想看看你会怎么想这件事）",
+-  
+-  "最后我帮你整理一下，你可以告诉我你的名字、学校和专业吗？"
++const STEP1_OPTIONS = [
++  "我做过课程作业 / 上课相关的事情",
++  "我帮老师或同学做过一些事",
++  "我参加过活动 / 社团 / 班级事务",
++  "我做过兼职 / 打工 / 简单实习",
++  "我也说不太清，但可以先开始"
++];
++
++const STEP2_OPTIONS = [
++  "整理东西（资料 / 表格 / 文件）",
++  "通知别人 / 对接事情",
++  "记录信息 / 登记内容",
++  "协助别人完成事情",
++  "写过一点内容 / 文案",
++  "不太确定，选一个接近的"
+ ];
+ 
+-function addMessage(text, type="ai") {
+-  const div = document.createElement("div");
+-  div.className = "msg " + type;
+-  div.innerText = text;
+-  chatBox.appendChild(div);
++// 第一步选项状态：记录用户点击的“场景类型”。
++let step1Choice = "";
++// 第二步选项状态：记录用户点击的“动作类型”。
++let step2Choice = "";
++
++// 句子确认状态：候选句、当前索引、最终确认句。
++let sentenceVariants = [];
++let sentenceIndex = 0;
++let confirmedExperience = "";
++
++function addMessage(text, type = "ai") {
++  const row = document.createElement("div");
++  row.className = `msg-row ${type}`;
++
++  const bubble = document.createElement("div");
++  bubble.className = `msg ${type}`;
++  bubble.innerText = text;
++
++  row.appendChild(bubble);
++  chatBox.appendChild(row);
+   chatBox.scrollTop = chatBox.scrollHeight;
+ }
+ 
+-function saveAnswer(val) {
+-  if (step === 0) answers.job = val;
+-  if (step === 1) answers.achievement = val;
+-  if (step === 2) answers.behavior = val;
+-  if (step === 3) answers.skills = val;
+-  if (step === 4) answers.upgrade = val;
+-  if (step === 5) answers.proof = val;
+-  if (step === 6) answers.name = val;
+-  if (step === 7) answers.school = val;
+-  if (step === 8) answers.major = val;
++function addOptions(options, onPick) {
++  const wrap = document.createElement("div");
++  wrap.className = "options-wrap";
++
++  options.forEach((optionText) => {
++    const btn = document.createElement("button");
++    btn.type = "button";
++    btn.className = "option-btn";
++    btn.textContent = optionText;
++    btn.onclick = () => {
++      wrap.remove();
++      onPick(optionText);
++    };
++    wrap.appendChild(btn);
++  });
++
++  chatBox.appendChild(wrap);
++  chatBox.scrollTop = chatBox.scrollHeight;
++}
++
++function addSentenceActions() {
++  const wrap = document.createElement("div");
++  wrap.className = "sentence-actions";
++
++  const useBtn = document.createElement("button");
++  useBtn.className = "primary-btn";
++  useBtn.textContent = "就用这句";
++  useBtn.onclick = () => {
++    wrap.remove();
++    confirmedExperience = sentenceVariants[sentenceIndex];
++    addMessage(`就用这句：${confirmedExperience}`, "user");
++    addMessage("好，我们就用这句。接下来补充基础信息，我来帮你生成完整简历。", "ai");
++    renderPostForm();
++  };
++
++  const retryBtn = document.createElement("button");
++  retryBtn.className = "secondary-btn";
++  retryBtn.textContent = "换一句";
++  retryBtn.onclick = () => {
++    sentenceIndex = (sentenceIndex + 1) % sentenceVariants.length;
++    const nextSentence = sentenceVariants[sentenceIndex];
++    addMessage(`那我们换成：${nextSentence}`, "ai");
++  };
++
++  const editBtn = document.createElement("button");
++  editBtn.className = "secondary-btn";
++  editBtn.textContent = "我想改一下";
++  editBtn.onclick = () => {
++    renderSentenceEditor(wrap);
++  };
++
++  wrap.appendChild(useBtn);
++  wrap.appendChild(retryBtn);
++  wrap.appendChild(editBtn);
++  chatBox.appendChild(wrap);
++  chatBox.scrollTop = chatBox.scrollHeight;
+ }
+ 
+-async function generateResume() {
++function renderSentenceEditor(actionWrap) {
++  actionWrap.style.display = "none";
++
++  const editWrap = document.createElement("div");
++  editWrap.className = "sentence-edit";
++
++  const input = document.createElement("input");
++  input.value = sentenceVariants[sentenceIndex];
++  input.placeholder = "你可以在这句基础上改一下";
++
++  const saveBtn = document.createElement("button");
++  saveBtn.className = "primary-btn";
++  saveBtn.textContent = "确认这句";
++  saveBtn.onclick = () => {
++    const updated = input.value.trim();
++    if (!updated) return;
++    sentenceVariants[sentenceIndex] = updated;
++    confirmedExperience = updated;
++    editWrap.remove();
++    actionWrap.remove();
++    addMessage(`我改成：${updated}`, "user");
++    addMessage("收到，这句就很合适。下面继续基础信息。", "ai");
++    renderPostForm();
++  };
++
++  const cancelBtn = document.createElement("button");
++  cancelBtn.className = "secondary-btn";
++  cancelBtn.textContent = "取消";
++  cancelBtn.onclick = () => {
++    editWrap.remove();
++    actionWrap.style.display = "flex";
++  };
++
++  editWrap.appendChild(input);
++  editWrap.appendChild(saveBtn);
++  editWrap.appendChild(cancelBtn);
++  chatBox.appendChild(editWrap);
++  chatBox.scrollTop = chatBox.scrollHeight;
++}
++
++// 句子生成逻辑：根据两个选项拼出低门槛“可转译表达”，并提供同义候选。
++function buildSentenceVariants(s1, s2) {
++  const uncertainS1 = s1.includes("说不太清");
++  const uncertainS2 = s2.includes("不太确定");
++
++  if (uncertainS1 && uncertainS2) {
++    return [
++      "我做过一些基础协助工作",
++      "我参与过一些整理和协助类的事情",
++      "我在学校里做过一些执行和配合类任务"
++    ];
++  }
++
++  const sceneMap = {
++    "我做过课程作业 / 上课相关的事情": ["我在课程作业中", "我在上课相关任务里"],
++    "我帮老师或同学做过一些事": ["我帮老师", "我帮同学"],
++    "我参加过活动 / 社团 / 班级事务": ["我在活动中", "我在社团/班级事务里"],
++    "我做过兼职 / 打工 / 简单实习": ["我在兼职中", "我在打工/实习中"],
++    "我也说不太清，但可以先开始": ["我做过", "我参与过"]
++  };
++
++  const actionMap = {
++    "整理东西（资料 / 表格 / 文件）": ["整理过资料", "整理过表格和文件"],
++    "通知别人 / 对接事情": ["通知过同学", "对接过一些事情"],
++    "记录信息 / 登记内容": ["做过信息登记", "记录过基础信息"],
++    "协助别人完成事情": ["协助处理过事务", "配合完成过任务"],
++    "写过一点内容 / 文案": ["写过基础文案", "整理过简单内容"],
++    "不太确定，选一个接近的": ["做过一些协助和执行类工作", "参与过基础配合工作"]
++  };
++
++  const scenes = sceneMap[s1] || ["我做过"];
++  const actions = actionMap[s2] || ["一些基础工作"];
++  const variants = [];
++
++  for (const scene of scenes) {
++    for (const action of actions) {
++      variants.push(`${scene}${action}`);
++    }
++  }
++
++  if (uncertainS1 || uncertainS2) {
++    variants.push("我参与过一些整理和协助类的事情");
++  }
++
++  return [...new Set(variants)];
++}
++
++function renderPostForm() {
++  if (document.getElementById("postForm")) return;
++
++  const formWrap = document.createElement("form");
++  formWrap.id = "postForm";
++  formWrap.className = "post-form";
++  formWrap.innerHTML = `
++    <h3>基础信息（确认第一句话后再填写）</h3>
++    <div class="post-form-grid">
++      <div>
++        <label for="name">姓名</label>
++        <input id="name" required placeholder="例如：张三" />
++      </div>
++      <div>
++        <label for="school">学校</label>
++        <input id="school" required placeholder="例如：XX大学" />
++      </div>
++      <div>
++        <label for="major">专业</label>
++        <input id="major" required placeholder="例如：市场营销" />
++      </div>
++      <div>
++        <label for="job">申请岗位</label>
++        <input id="job" required placeholder="例如：运营实习生" />
++      </div>
++      <div class="full">
++        <label for="skills">技能关键词</label>
++        <input id="skills" placeholder="例如：Excel、沟通协作、活动执行" />
++      </div>
++      <div class="full">
++        <label for="extra">补充说明</label>
++        <textarea id="extra" placeholder="可补充时间、结果、获奖等信息"></textarea>
++      </div>
++      <div class="full">
++        <button type="submit" class="primary-btn">生成简历</button>
++      </div>
++    </div>
++  `;
++
++  formWrap.addEventListener("submit", async (e) => {
++    e.preventDefault();
++    await generateResume({
++      name: document.getElementById("name").value.trim(),
++      school: document.getElementById("school").value.trim(),
++      major: document.getElementById("major").value.trim(),
++      job: document.getElementById("job").value.trim(),
++      skills: document.getElementById("skills").value.trim(),
++      extra: document.getElementById("extra").value.trim()
++    });
++  });
++
++  chatBox.appendChild(formWrap);
++  chatBox.scrollTop = chatBox.scrollHeight;
++}
++
++async function generateResume(baseData) {
++  if (!confirmedExperience) return;
++
+   loading.style.display = "block";
++  result.innerHTML = "";
+ 
++  // 保留原有 API 提交流程；experience 改为已确认的一句话。
+   const payload = {
+-    name: answers.name,
+-    school: answers.school,
+-    major: answers.major,
+-    job: answers.job,
+-    skills: answers.skills + "；" + answers.upgrade,
+-    experience: answers.achievement + "\n" + answers.behavior,
+-    extra: answers.proof
++    name: baseData.name,
++    school: baseData.school,
++    major: baseData.major,
++    job: baseData.job,
++    skills: baseData.skills,
++    experience: confirmedExperience,
++    extra: baseData.extra
+   };
+ 
+   try {
+     const resp = await fetch(API_URL, {
+       method: "POST",
+       headers: { "Content-Type": "application/json" },
+       body: JSON.stringify(payload),
+     });
+ 
+     const data = await resp.json();
+     loading.style.display = "none";
+-
+-    result.innerHTML = "<h2>生成结果</h2><div class='resume-block'>" + data.resume + "</div>";
++    result.innerHTML = "<h2>生成结果</h2><div class='resume-block'>" + (data.resume || "") + "</div>";
+   } catch (e) {
+     loading.style.display = "none";
+     result.innerHTML = "<p>生成失败，请重试</p>";
+   }
+ }
+ 
+-btn.onclick = () => {
+-  const val = input.value.trim();
+-  if (!val) return;
++function startFlow() {
++  addMessage("我们不用一下子写简历，先从一件你做过的事情开始。你更接近哪种情况？", "ai");
+ 
+-  addMessage(val, "user");
+-  saveAnswer(val);
+-  input.value = "";
++  addOptions(STEP1_OPTIONS, (picked1) => {
++    step1Choice = picked1;
++    addMessage(picked1, "user");
+ 
+-  step++;
++    addMessage("你当时更像在做哪种事？", "ai");
++    addOptions(STEP2_OPTIONS, (picked2) => {
++      step2Choice = picked2;
++      addMessage(picked2, "user");
+ 
+-  if (step < questions.length) {
+-    setTimeout(() => addMessage(questions[step]), 400);
+-  } else {
+-    addMessage("好的，我来帮你整理一下简历...");
+-    generateResume();
+-  }
+-};
++      sentenceVariants = buildSentenceVariants(step1Choice, step2Choice);
++      sentenceIndex = 0;
++
++      addMessage(`我先帮你整理成一句：${sentenceVariants[sentenceIndex]}`, "ai");
++      addSentenceActions();
++    });
++  });
++}
+ 
+-// 初始问题
+-addMessage(questions[0]);
++startFlow();
+ </script>
+ </body>
+ </html>
