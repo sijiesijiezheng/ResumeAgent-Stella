@@ -16,7 +16,6 @@
       --soft: #eff6ff;
       --good: #0f766e;
       --warn: #b45309;
-      --danger: #b42318;
       --shadow: 0 14px 35px rgba(15, 23, 42, 0.08);
     }
 
@@ -74,10 +73,7 @@
       margin: 0 0 26px;
     }
 
-    .step-list {
-      display: grid;
-      gap: 10px;
-    }
+    .step-list { display: grid; gap: 10px; }
 
     .step-item {
       display: grid;
@@ -89,10 +85,8 @@
       color: #344054;
     }
 
-    .step-item.active {
-      background: var(--soft);
-      color: #173a82;
-    }
+    .step-item.active { background: var(--soft); color: #173a82; }
+    .step-item.done .step-num { background: #dbeafe; color: #1d4ed8; }
 
     .step-num {
       width: 24px;
@@ -106,17 +100,11 @@
       font-weight: 800;
     }
 
-    .step-item.active .step-num {
-      background: var(--brand);
-      color: #fff;
-    }
-
+    .step-item.active .step-num { background: var(--brand); color: #fff; }
     .step-title { font-size: 13px; font-weight: 700; }
     .step-desc { font-size: 12px; color: var(--muted); margin-top: 2px; line-height: 1.45; }
 
-    main {
-      padding: 32px;
-    }
+    main { padding: 32px; }
 
     .workspace {
       max-width: 1080px;
@@ -132,8 +120,7 @@
       align-items: stretch;
     }
 
-    .hero-main,
-    .panel {
+    .hero-main, .panel {
       background: var(--panel);
       border: 1px solid var(--line);
       border-radius: 8px;
@@ -156,11 +143,7 @@
       margin-bottom: 14px;
     }
 
-    h1 {
-      margin: 0;
-      font-size: 30px;
-      line-height: 1.18;
-    }
+    h1 { margin: 0; font-size: 30px; line-height: 1.18; }
 
     .lead {
       margin: 14px 0 0;
@@ -169,11 +152,7 @@
       max-width: 640px;
     }
 
-    .proof-grid {
-      display: grid;
-      gap: 10px;
-      margin-top: 20px;
-    }
+    .proof-grid { display: grid; gap: 10px; margin-top: 20px; }
 
     .proof-item {
       border: 1px solid var(--line);
@@ -185,24 +164,10 @@
     .proof-item strong { display: block; font-size: 13px; margin-bottom: 4px; }
     .proof-item span { display: block; color: var(--muted); font-size: 12px; line-height: 1.5; }
 
-    .section-title {
-      margin: 0 0 4px;
-      font-size: 18px;
-      line-height: 1.3;
-    }
+    .section-title { margin: 0 0 4px; font-size: 18px; line-height: 1.3; }
+    .section-note { margin: 0 0 16px; color: var(--muted); line-height: 1.55; font-size: 13px; }
 
-    .section-note {
-      margin: 0 0 16px;
-      color: var(--muted);
-      line-height: 1.55;
-      font-size: 13px;
-    }
-
-    .chips {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-    }
+    .chips { display: flex; flex-wrap: wrap; gap: 10px; }
 
     .chip {
       border: 1px solid #bfdbfe;
@@ -216,17 +181,9 @@
     }
 
     .chip:hover { background: #eff6ff; }
-    .chip.selected {
-      background: var(--brand);
-      border-color: var(--brand);
-      color: #fff;
-    }
+    .chip.selected { background: var(--brand); border-color: var(--brand); color: #fff; }
 
-    .choice-grid {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 12px;
-    }
+    .choice-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
 
     .choice-card {
       border: 1px solid var(--line);
@@ -237,11 +194,7 @@
       min-height: 116px;
     }
 
-    .choice-card.selected {
-      border-color: var(--brand);
-      background: #eff6ff;
-    }
-
+    .choice-card.selected { border-color: var(--brand); background: #eff6ff; }
     .choice-card strong { display: block; margin-bottom: 8px; }
     .choice-card span { display: block; color: var(--muted); line-height: 1.55; font-size: 13px; }
 
@@ -265,12 +218,7 @@
 
     textarea { min-height: 112px; resize: vertical; line-height: 1.6; }
 
-    .actions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-top: 18px;
-    }
+    .actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 18px; }
 
     .btn {
       border: 1px solid transparent;
@@ -285,13 +233,8 @@
     .btn.primary:hover { background: var(--brand-dark); }
     .btn.secondary { background: #fff; color: #1d4ed8; border-color: #bfdbfe; }
     .btn.ghost { background: transparent; color: #475467; border-color: var(--line); }
-    .btn:disabled { opacity: .48; cursor: not-allowed; }
 
-    .two-col {
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) minmax(300px, 0.86fr);
-      gap: 18px;
-    }
+    .two-col { display: grid; grid-template-columns: minmax(0, 1fr) minmax(300px, 0.86fr); gap: 18px; }
 
     .status-box {
       border: 1px solid var(--line);
@@ -304,11 +247,7 @@
     .status-box h3 { margin: 0 0 6px; font-size: 15px; }
     .status-box p { margin: 0; color: var(--muted); line-height: 1.6; font-size: 13px; }
 
-    .eval-grid {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 12px;
-    }
+    .eval-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
 
     .metric {
       border: 1px solid var(--line);
@@ -319,18 +258,11 @@
 
     .metric b { font-size: 22px; display: block; }
     .metric span { color: var(--muted); font-size: 12px; line-height: 1.4; }
-
     .score-main b { color: var(--brand-dark); }
     .good b { color: var(--good); }
     .warn b { color: var(--warn); }
 
-    .list {
-      display: grid;
-      gap: 8px;
-      margin: 0;
-      padding: 0;
-      list-style: none;
-    }
+    .list { display: grid; gap: 8px; margin: 0; padding: 0; list-style: none; }
 
     .list li {
       border: 1px solid var(--line);
@@ -413,7 +345,7 @@
             <h2 class="section-title">核心设计</h2>
             <p class="section-note">不是让 AI 直接编简历，而是先判断经历值不值得写、缺什么，再补一个关键事实。</p>
             <div class="proof-grid">
-              <div class="proof-item"><strong>低压力分流</strong><span>允许用户不知道岗位、也不知道写什么。</span></div>
+              <div class="proof-item"><strong>低压力分流</strong><span>允许用户不知道岗位，也不知道写什么。</span></div>
               <div class="proof-item"><strong>贯穿式价值评估</strong><span>先筛选、再补洞、最后定表达边界。</span></div>
               <div class="proof-item"><strong>不虚构事实</strong><span>只拔高表达，不拔高事实。</span></div>
             </div>
@@ -448,10 +380,13 @@
           <div class="status-box hidden" id="recommendBox">
             <h3 id="recommendTitle"></h3>
             <p id="recommendReason"></p>
+            <div class="actions">
+              <button class="btn primary" id="useRecommendationBtn">用这段经历继续</button>
+            </div>
           </div>
         </section>
 
-        <section class="two-col" id="stepInput">
+        <section class="two-col hidden" id="stepInput">
           <div class="panel">
             <h2 class="section-title">Step 4｜用一句话说说这件事</h2>
             <p class="section-note">不用正式，像聊天一样说就行。例：我帮老师整理过学生名单，后来老师拿去统计。</p>
@@ -541,13 +476,13 @@
 
   <script>
     const roles = [
-      { id: 'ops', label: '运营/新媒体/内容', focus: ['内容发布', '活动执行', '用户反馈', '数据记录'], verbs: ['发布', '整理', '记录', '跟进'] },
-      { id: 'admin', label: '行政/助理/文职', focus: ['资料整理', '表格核对', '通知对接', '归档管理'], verbs: ['整理', '核对', '归档', '对接'] },
-      { id: 'sales', label: '销售/客服/用户沟通', focus: ['接待服务', '客户沟通', '需求记录', '反馈跟进'], verbs: ['接待', '记录', '沟通', '跟进'] },
-      { id: 'pm', label: '产品/项目助理', focus: ['流程梳理', '需求记录', '协作推进', '问题反馈'], verbs: ['收集', '整理', '跟进', '记录'] },
-      { id: 'edu', label: '教育/教务/培训', focus: ['学生沟通', '课程支持', '资料整理', '活动组织'], verbs: ['整理', '通知', '支持', '记录'] },
-      { id: 'finance', label: '金融/财务/数据助理', focus: ['数据准确性', '资料核对', '信息整理', '细致度'], verbs: ['核对', '整理', '记录', '归档'] },
-      { id: 'general', label: '暂时不确定', focus: ['信息整理', '执行支持', '沟通协作', '基础数据处理'], verbs: ['整理', '协助', '记录', '支持'] }
+      { id: 'ops', label: '运营/新媒体/内容', focus: ['内容发布', '活动执行', '用户反馈', '数据记录'] },
+      { id: 'admin', label: '行政/助理/文职', focus: ['资料整理', '表格核对', '通知对接', '归档管理'] },
+      { id: 'sales', label: '销售/客服/用户沟通', focus: ['接待服务', '客户沟通', '需求记录', '反馈跟进'] },
+      { id: 'pm', label: '产品/项目助理', focus: ['流程梳理', '需求记录', '协作推进', '问题反馈'] },
+      { id: 'edu', label: '教育/教务/培训', focus: ['学生沟通', '课程支持', '资料整理', '活动组织'] },
+      { id: 'finance', label: '金融/财务/数据助理', focus: ['数据准确性', '资料核对', '信息整理', '细致度'] },
+      { id: 'general', label: '暂时不确定', focus: ['信息整理', '执行支持', '沟通协作', '基础数据处理'] }
     ];
 
     const inventoryTypes = [
@@ -572,6 +507,7 @@
     ];
 
     const state = {
+      activeStep: 1,
       role: roles[6],
       status: '',
       selectedTypes: [],
@@ -583,13 +519,25 @@
 
     const $ = (id) => document.getElementById(id);
 
-    function renderSteps(activeIndex = 1) {
-      $('stepList').innerHTML = steps.map((step, index) => `
-        <div class="step-item ${index + 1 === activeIndex ? 'active' : ''}">
-          <div class="step-num">${step[0]}</div>
-          <div><div class="step-title">${step[1]}</div><div class="step-desc">${step[2]}</div></div>
-        </div>
-      `).join('');
+    function setActiveStep(step, scrollTarget) {
+      state.activeStep = step;
+      renderSteps();
+      if (scrollTarget) {
+        setTimeout(() => scrollTarget.scrollIntoView({ behavior: 'smooth', block: 'start' }), 60);
+      }
+    }
+
+    function renderSteps() {
+      $('stepList').innerHTML = steps.map((step, index) => {
+        const num = index + 1;
+        const klass = num === state.activeStep ? 'active' : num < state.activeStep ? 'done' : '';
+        return `
+          <div class="step-item ${klass}">
+            <div class="step-num">${step[0]}</div>
+            <div><div class="step-title">${step[1]}</div><div class="step-desc">${step[2]}</div></div>
+          </div>
+        `;
+      }).join('');
     }
 
     function renderRoleChips() {
@@ -599,7 +547,7 @@
           state.role = roles.find((role) => role.id === btn.dataset.role);
           renderRoleChips();
           renderState();
-          renderSteps(2);
+          setActiveStep(Math.max(state.activeStep, 2), $('stepStatus'));
         };
       });
     }
@@ -648,9 +596,7 @@
       box.classList.remove('hidden');
       $('recommendTitle').textContent = `建议先写：${state.recommendedType.label}`;
       $('recommendReason').textContent = `${state.recommendedType.reason} 先把这件事聊清楚，再判断能否作为主经历。`;
-      if (!$('experienceInput').value.trim()) {
-        $('experienceInput').placeholder = `比如：我做过${state.recommendedType.label}，主要做了...`;
-      }
+      $('experienceInput').placeholder = `比如：我做过${state.recommendedType.label}，主要做了...`;
     }
 
     function renderState() {
@@ -660,19 +606,37 @@
         `目标方向：${state.role.label}`,
         `经历入口：${statusText}`,
         `推荐经历：${rec}`,
-        `生成原则：不虚构事实，只拔高表达`
+        '生成原则：不虚构事实，只拔高表达'
       ].map((item) => `<li>${item}</li>`).join('');
+    }
+
+    function showInput(step = 4, scroll = true) {
+      $('stepInput').classList.remove('hidden');
+      setActiveStep(step, scroll ? $('stepInput') : null);
     }
 
     function setupStatusCards() {
       document.querySelectorAll('[data-status]').forEach((card) => {
         card.onclick = () => {
           state.status = card.dataset.status;
+          state.selectedTypes = [];
+          state.recommendedType = null;
+          $('stepEvaluate').classList.add('hidden');
+          $('stepResult').classList.add('hidden');
           document.querySelectorAll('[data-status]').forEach((item) => item.classList.remove('selected'));
           card.classList.add('selected');
-          $('stepInventory').classList.toggle('hidden', state.status !== 'unknown');
+
+          if (state.status === 'unknown') {
+            $('stepInventory').classList.remove('hidden');
+            $('stepInput').classList.add('hidden');
+            renderInventoryChips();
+            renderRecommendation();
+            setActiveStep(3, $('stepInventory'));
+          } else {
+            $('stepInventory').classList.add('hidden');
+            showInput(4);
+          }
           renderState();
-          renderSteps(state.status === 'unknown' ? 3 : 4);
         };
       });
     }
@@ -683,6 +647,10 @@
 
     function evaluateExperience() {
       const text = $('experienceInput').value.trim();
+      if (!text) {
+        $('experienceInput').focus();
+        return;
+      }
       state.experienceText = text;
       const typeLabel = state.recommendedType?.label || (state.status === 'has' ? '用户自选经历' : '普通校园经历');
       const hasAction = includesAny(text, ['整理', '核对', '记录', '对接', '通知', '发布', '收集', '分类', '维护', '协助', '参与', '完成', '跟进', '写', '做']);
@@ -743,8 +711,7 @@
       $('strengthList').innerHTML = ev.strengths.map((item) => `<li>${item}</li>`).join('');
       $('weaknessList').innerHTML = ev.weaknesses.map((item) => `<li>${item}</li>`).join('');
       $('nextQuestionText').textContent = ev.nextQuestion;
-      renderSteps(5);
-      $('stepEvaluate').scrollIntoView({ behavior: 'smooth', block: 'start' });
+      setActiveStep(5, $('stepEvaluate'));
     }
 
     function buildBullet() {
@@ -756,9 +723,7 @@
       const object = text.includes('表格') ? '表格信息' : text.includes('名单') ? '名单资料' : text.includes('活动') ? '活动信息' : text.includes('内容') ? '内容素材' : '相关资料';
       const hasFollowNumber = /\d|一|二|三|四|五|六|七|八|九|十|百|千|万|多|几/.test(follow);
       const roleFocus = role.focus[0];
-      const suffix = follow
-        ? `，${follow.replace(/[。.!！]$/g, '')}`
-        : `，支持${roleFocus}`;
+      const suffix = follow ? `，${follow.replace(/[。.!！]$/g, '')}` : `，支持${roleFocus}`;
       const prefix = ev.level === '主经历' ? '参与' : '协助';
       const bullet1 = `${prefix}${action}${object}${suffix}`;
       const bullet2 = hasFollowNumber
@@ -788,8 +753,7 @@
         : state.evaluation.missing === '结果用途'
           ? '下一步可以补充这件事后来被谁使用，或者帮助别人完成了什么。'
           : '下一步可以补充更具体的动作、工具和使用结果。';
-      renderSteps(6);
-      $('stepResult').scrollIntoView({ behavior: 'smooth', block: 'start' });
+      setActiveStep(6, $('stepResult'));
     }
 
     function fillExample() {
@@ -798,16 +762,18 @@
       state.selectedTypes = ['teacher', 'content'];
       state.recommendedType = recommendType();
       $('experienceInput').value = '我帮老师整理过学生名单和一些表格，后来老师拿去做统计。';
-      renderRoleChips();
-      document.querySelectorAll('[data-status]').forEach((item) => item.classList.toggle('selected', item.dataset.status === 'unknown'));
       $('stepInventory').classList.remove('hidden');
+      $('stepInput').classList.remove('hidden');
+      document.querySelectorAll('[data-status]').forEach((item) => item.classList.toggle('selected', item.dataset.status === 'unknown'));
+      renderRoleChips();
       renderInventoryChips();
       renderRecommendation();
       renderState();
-      renderSteps(4);
+      setActiveStep(4, $('stepInput'));
     }
 
     function restart() {
+      state.activeStep = 1;
       state.role = roles[6];
       state.status = '';
       state.selectedTypes = [];
@@ -818,6 +784,7 @@
       $('experienceInput').value = '';
       $('followupInput').value = '';
       $('stepInventory').classList.add('hidden');
+      $('stepInput').classList.add('hidden');
       $('stepEvaluate').classList.add('hidden');
       $('stepResult').classList.add('hidden');
       document.querySelectorAll('[data-status]').forEach((item) => item.classList.remove('selected'));
@@ -825,7 +792,7 @@
       renderInventoryChips();
       renderRecommendation();
       renderState();
-      renderSteps(1);
+      renderSteps();
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
@@ -833,8 +800,9 @@
     $('generateBtn').onclick = generateResult;
     $('fillExampleBtn').onclick = fillExample;
     $('restartBtn').onclick = restart;
+    $('useRecommendationBtn').onclick = () => showInput(4);
 
-    renderSteps(1);
+    renderSteps();
     renderRoleChips();
     renderInventoryChips();
     renderState();
