@@ -3,541 +3,659 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ResumeAgent MVP｜对话式简历启动器</title>
+  <title>灵秀花园｜对话式简历启动器</title>
   <style>
     :root {
-      --bg: #f5f7fb;
-      --panel: #ffffff;
-      --ink: #172033;
-      --muted: #667085;
-      --line: #dde4f0;
-      --brand: #2563eb;
-      --brand-dark: #1d4ed8;
-      --soft: #eff6ff;
-      --good: #0f766e;
-      --warn: #b45309;
-      --shadow: 0 14px 35px rgba(15, 23, 42, 0.08);
+      --sky: #e8fbff;
+      --mint: #d9f8ec;
+      --leaf: #4faf7a;
+      --leaf-dark: #237a55;
+      --sun: #fff3bf;
+      --peach: #ffd6c9;
+      --lavender: #ece7ff;
+      --ink: #263447;
+      --muted: #6b7687;
+      --line: rgba(69, 103, 130, 0.16);
+      --paper: rgba(255, 255, 255, 0.86);
+      --white: #ffffff;
+      --shadow: 0 22px 60px rgba(45, 80, 110, 0.16);
+      --radius: 24px;
     }
 
     * { box-sizing: border-box; }
 
     body {
       margin: 0;
-      font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", Arial, sans-serif;
-      background: var(--bg);
+      min-height: 100vh;
       color: var(--ink);
+      font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", Arial, sans-serif;
+      background:
+        radial-gradient(circle at 14% 12%, rgba(255, 243, 191, .95), transparent 24%),
+        radial-gradient(circle at 88% 8%, rgba(236, 231, 255, .9), transparent 28%),
+        linear-gradient(180deg, var(--sky) 0%, #f8fff7 56%, #fffaf3 100%);
       letter-spacing: 0;
     }
 
     button, input, textarea { font: inherit; }
+    button { border: 0; }
 
-    .shell {
+    .page {
       min-height: 100vh;
       display: grid;
-      grid-template-columns: 280px minmax(0, 1fr);
+      grid-template-columns: 300px minmax(0, 1fr);
     }
 
     .sidebar {
-      padding: 28px 22px;
-      border-right: 1px solid var(--line);
-      background: #ffffff;
       position: sticky;
       top: 0;
       height: 100vh;
+      padding: 28px 22px;
+      background: rgba(255, 255, 255, .62);
+      border-right: 1px solid var(--line);
+      backdrop-filter: blur(18px);
     }
 
     .brand {
       display: flex;
       align-items: center;
-      gap: 10px;
-      font-weight: 800;
-      font-size: 18px;
-      margin-bottom: 8px;
+      gap: 12px;
+      margin-bottom: 12px;
     }
 
     .brand-mark {
-      width: 32px;
-      height: 32px;
-      border-radius: 8px;
+      width: 42px;
+      height: 42px;
       display: grid;
       place-items: center;
-      background: var(--brand);
+      border-radius: 16px;
       color: #fff;
-      font-weight: 800;
+      font-weight: 900;
+      background: linear-gradient(135deg, #47be8c, #6b8df7);
+      box-shadow: 0 12px 30px rgba(71, 190, 140, .24);
     }
 
-    .tagline {
-      color: var(--muted);
-      line-height: 1.55;
-      font-size: 13px;
-      margin: 0 0 26px;
-    }
+    .brand-title { font-size: 22px; font-weight: 900; }
+    .brand-sub { color: var(--muted); font-size: 13px; line-height: 1.7; margin: 0 0 26px; }
 
-    .step-list { display: grid; gap: 10px; }
+    .map-title { font-size: 13px; font-weight: 900; margin: 0 0 12px; color: var(--leaf-dark); }
+    .journey { display: grid; gap: 12px; }
 
-    .step-item {
+    .node {
       display: grid;
-      grid-template-columns: 24px 1fr;
+      grid-template-columns: 34px 1fr;
       gap: 10px;
-      align-items: start;
-      padding: 10px 8px;
-      border-radius: 8px;
-      color: #344054;
+      align-items: center;
+      padding: 12px;
+      border-radius: 18px;
+      color: #496071;
+      background: rgba(255, 255, 255, .42);
+      border: 1px solid transparent;
     }
 
-    .step-item.active { background: var(--soft); color: #173a82; }
-    .step-item.done .step-num { background: #dbeafe; color: #1d4ed8; }
-
-    .step-num {
-      width: 24px;
-      height: 24px;
+    .node-dot {
+      width: 34px;
+      height: 34px;
       border-radius: 999px;
       display: grid;
       place-items: center;
-      background: #e5e7eb;
-      color: #475467;
-      font-size: 12px;
-      font-weight: 800;
+      font-weight: 900;
+      background: #edf3f5;
+      color: #8b98a7;
     }
 
-    .step-item.active .step-num { background: var(--brand); color: #fff; }
-    .step-title { font-size: 13px; font-weight: 700; }
-    .step-desc { font-size: 12px; color: var(--muted); margin-top: 2px; line-height: 1.45; }
+    .node.active {
+      background: rgba(255, 255, 255, .86);
+      border-color: rgba(79, 175, 122, .24);
+      box-shadow: 0 12px 28px rgba(61, 116, 92, .12);
+      color: var(--ink);
+    }
 
-    main { padding: 32px; }
+    .node.active .node-dot { background: var(--leaf); color: #fff; }
+    .node.done .node-dot { background: #c8f3d9; color: var(--leaf-dark); }
+    .node-name { font-size: 14px; font-weight: 900; }
+    .node-desc { margin-top: 2px; font-size: 12px; color: var(--muted); line-height: 1.4; }
 
-    .workspace {
-      max-width: 1080px;
+    main { padding: 30px; }
+
+    .garden {
+      max-width: 1160px;
       margin: 0 auto;
       display: grid;
       gap: 18px;
     }
 
     .hero {
-      display: grid;
-      grid-template-columns: minmax(0, 1.3fr) minmax(280px, 0.7fr);
-      gap: 18px;
-      align-items: stretch;
-    }
-
-    .hero-main, .panel {
-      background: var(--panel);
+      min-height: 500px;
+      position: relative;
+      overflow: hidden;
       border: 1px solid var(--line);
-      border-radius: 8px;
+      border-radius: 30px;
+      background:
+        radial-gradient(circle at 18% 82%, rgba(255, 214, 201, .9), transparent 22%),
+        radial-gradient(circle at 72% 18%, rgba(255, 243, 191, .88), transparent 22%),
+        linear-gradient(135deg, rgba(255,255,255,.82), rgba(219, 250, 236, .78));
       box-shadow: var(--shadow);
     }
 
-    .hero-main { padding: 28px; }
-    .panel { padding: 22px; }
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: auto -10% -36% -10%;
+      height: 48%;
+      border-radius: 50% 50% 0 0;
+      background: linear-gradient(180deg, #b9edca, #8bd9ab);
+    }
 
-    .eyebrow {
+    .hero::after {
+      content: "";
+      position: absolute;
+      left: 9%;
+      right: 8%;
+      bottom: 18%;
+      height: 54px;
+      border-radius: 999px;
+      border: 2px dashed rgba(77, 145, 111, .28);
+      transform: rotate(-4deg);
+    }
+
+    .cloud {
+      position: absolute;
+      width: 116px;
+      height: 42px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.78);
+      filter: blur(.2px);
+    }
+    .cloud.one { left: 8%; top: 54px; }
+    .cloud.two { right: 14%; top: 82px; width: 150px; opacity: .76; }
+
+    .tree {
+      position: absolute;
+      right: 8%;
+      bottom: 92px;
+      width: 270px;
+      height: 320px;
+    }
+
+    .trunk {
+      position: absolute;
+      left: 124px;
+      bottom: 0;
+      width: 34px;
+      height: 150px;
+      border-radius: 22px;
+      background: linear-gradient(180deg, #b98255, #8c5a3e);
+    }
+
+    .leaf {
+      position: absolute;
+      border-radius: 52% 48% 55% 45%;
+      background: linear-gradient(135deg, #7bdc9b, #37a86f);
+      box-shadow: inset -8px -10px 0 rgba(21, 112, 75, .12);
+      transform: scale(var(--grow, .72));
+      transition: transform .45s ease, opacity .45s ease;
+      opacity: var(--opacity, .48);
+    }
+    .leaf.a { width: 130px; height: 112px; left: 72px; top: 48px; }
+    .leaf.b { width: 118px; height: 104px; left: 12px; top: 108px; }
+    .leaf.c { width: 140px; height: 124px; right: 0; top: 106px; }
+    .leaf.d { width: 108px; height: 94px; left: 92px; top: 0; }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 360px;
+      gap: 24px;
+      padding: 38px;
+    }
+
+    .welcome { max-width: 650px; }
+    .eyebrow { color: var(--leaf-dark); font-weight: 900; font-size: 14px; margin-bottom: 12px; }
+    h1 { margin: 0; font-size: 42px; line-height: 1.1; letter-spacing: 0; }
+    .lead { margin: 18px 0 0; color: #526274; line-height: 1.8; font-size: 16px; max-width: 620px; }
+
+    .soft-tags { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 24px; }
+    .soft-tag {
+      padding: 9px 12px;
+      border-radius: 999px;
+      color: #2f644d;
+      background: rgba(255,255,255,.7);
+      border: 1px solid rgba(79, 175, 122, .22);
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    .companion-card {
+      align-self: start;
+      border-radius: 28px;
+      padding: 20px;
+      background: rgba(255, 255, 255, .82);
+      border: 1px solid rgba(255,255,255,.72);
+      box-shadow: 0 20px 50px rgba(70, 106, 125, .16);
+    }
+
+    .avatar-stage {
+      display: grid;
+      place-items: center;
+      min-height: 190px;
+      border-radius: 24px;
+      background: linear-gradient(180deg, #fff, #eefdf6);
+      border: 1px solid rgba(79, 175, 122, .18);
+      margin-bottom: 16px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .avatar-stage::after {
+      content: "";
+      position: absolute;
+      left: 24px;
+      right: 24px;
+      bottom: 24px;
+      height: 22px;
+      border-radius: 50%;
+      background: rgba(72, 132, 100, .13);
+    }
+
+    .avatar-preview {
+      width: 120px;
+      height: 120px;
+      border-radius: 999px;
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+      color: #fff;
+      font-size: 42px;
+      font-weight: 900;
+      background: linear-gradient(135deg, #74d99b, #88a7ff);
+      border: 5px solid #fff;
+      box-shadow: 0 18px 34px rgba(67, 115, 120, .18);
+      z-index: 1;
+    }
+
+    .avatar-preview img { width: 100%; height: 100%; object-fit: cover; }
+    .card-title { font-size: 18px; font-weight: 900; margin: 0 0 4px; }
+    .card-note { color: var(--muted); font-size: 13px; line-height: 1.6; margin: 0 0 14px; }
+
+    .field { display: grid; gap: 8px; margin: 12px 0; }
+    label { font-size: 13px; font-weight: 900; color: #34495e; }
+
+    input[type="text"], textarea {
+      width: 100%;
+      border: 1px solid rgba(91, 122, 145, .22);
+      border-radius: 16px;
+      padding: 12px 14px;
+      outline: none;
+      color: var(--ink);
+      background: rgba(255,255,255,.94);
+    }
+
+    textarea { min-height: 110px; resize: vertical; line-height: 1.65; }
+    input:focus, textarea:focus { border-color: #69c58f; box-shadow: 0 0 0 4px rgba(105, 197, 143, .15); }
+
+    .file-label {
       display: inline-flex;
+      justify-content: center;
       align-items: center;
       gap: 8px;
-      color: var(--brand-dark);
-      background: var(--soft);
-      border-radius: 999px;
-      padding: 6px 10px;
-      font-size: 12px;
-      font-weight: 800;
-      margin-bottom: 14px;
-    }
-
-    h1 { margin: 0; font-size: 30px; line-height: 1.18; }
-
-    .lead {
-      margin: 14px 0 0;
-      color: var(--muted);
-      line-height: 1.7;
-      max-width: 640px;
-    }
-
-    .proof-grid { display: grid; gap: 10px; margin-top: 20px; }
-
-    .proof-item {
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      padding: 12px;
-      background: #fbfcff;
-    }
-
-    .proof-item strong { display: block; font-size: 13px; margin-bottom: 4px; }
-    .proof-item span { display: block; color: var(--muted); font-size: 12px; line-height: 1.5; }
-
-    .section-title { margin: 0 0 4px; font-size: 18px; line-height: 1.3; }
-    .section-note { margin: 0 0 16px; color: var(--muted); line-height: 1.55; font-size: 13px; }
-
-    .chips { display: flex; flex-wrap: wrap; gap: 10px; }
-
-    .chip {
-      border: 1px solid #bfdbfe;
-      background: #fff;
-      color: #1e3a8a;
-      border-radius: 999px;
-      padding: 9px 13px;
-      cursor: pointer;
-      font-size: 13px;
-      transition: background .16s ease, border-color .16s ease, color .16s ease;
-    }
-
-    .chip:hover { background: #eff6ff; }
-    .chip.selected { background: var(--brand); border-color: var(--brand); color: #fff; }
-
-    .choice-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
-
-    .choice-card {
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      padding: 16px;
-      cursor: pointer;
-      background: #fff;
-      min-height: 116px;
-    }
-
-    .choice-card.selected { border-color: var(--brand); background: #eff6ff; }
-    .choice-card strong { display: block; margin-bottom: 8px; }
-    .choice-card span { display: block; color: var(--muted); line-height: 1.55; font-size: 13px; }
-
-    .form-row { display: grid; gap: 8px; margin-top: 14px; }
-    label { font-weight: 700; font-size: 13px; }
-
-    textarea, input {
       width: 100%;
-      border: 1px solid #cbd5e1;
-      border-radius: 8px;
-      padding: 11px 12px;
-      background: #fff;
-      color: var(--ink);
-      outline: none;
+      border: 1px dashed rgba(68, 137, 100, .42);
+      border-radius: 16px;
+      padding: 12px 14px;
+      cursor: pointer;
+      color: var(--leaf-dark);
+      background: rgba(240, 255, 247, .8);
+      font-weight: 900;
     }
-
-    textarea:focus, input:focus {
-      border-color: var(--brand);
-      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
-    }
-
-    textarea { min-height: 112px; resize: vertical; line-height: 1.6; }
-
-    .actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 18px; }
+    input[type="file"] { display: none; }
 
     .btn {
-      border: 1px solid transparent;
-      border-radius: 8px;
-      padding: 10px 15px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      min-height: 44px;
+      padding: 0 18px;
+      border-radius: 999px;
       cursor: pointer;
-      font-weight: 800;
-      font-size: 13px;
+      font-weight: 900;
+      color: #fff;
+      background: linear-gradient(135deg, #41b77b, #5b85f2);
+      box-shadow: 0 12px 26px rgba(65, 183, 123, .24);
     }
 
-    .btn.primary { background: var(--brand); color: #fff; }
-    .btn.primary:hover { background: var(--brand-dark); }
-    .btn.secondary { background: #fff; color: #1d4ed8; border-color: #bfdbfe; }
-    .btn.ghost { background: transparent; color: #475467; border-color: var(--line); }
+    .btn.secondary { color: var(--leaf-dark); background: #fff; border: 1px solid rgba(65, 183, 123, .26); box-shadow: none; }
+    .btn-row { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 16px; }
 
-    .two-col { display: grid; grid-template-columns: minmax(0, 1fr) minmax(300px, 0.86fr); gap: 18px; }
-
-    .status-box {
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      padding: 14px;
-      background: #fbfcff;
-      margin-top: 14px;
+    .panel {
+      border-radius: var(--radius);
+      padding: 24px;
+      background: var(--paper);
+      border: 1px solid rgba(255,255,255,.72);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(14px);
     }
 
-    .status-box h3 { margin: 0 0 6px; font-size: 15px; }
-    .status-box p { margin: 0; color: var(--muted); line-height: 1.6; font-size: 13px; }
+    .panel-title { margin: 0 0 6px; font-size: 24px; }
+    .panel-note { margin: 0 0 18px; color: var(--muted); line-height: 1.7; }
 
-    .eval-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+    .split { display: grid; grid-template-columns: minmax(0, 1fr) 360px; gap: 18px; }
 
-    .metric {
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      padding: 13px;
+    .chips { display: flex; flex-wrap: wrap; gap: 10px; }
+    .chip {
+      border: 1px solid rgba(77, 145, 111, .28);
+      background: rgba(255,255,255,.78);
+      color: #315b47;
+      border-radius: 999px;
+      padding: 10px 14px;
+      cursor: pointer;
+      font-weight: 900;
+      font-size: 14px;
+    }
+    .chip.selected { background: #4faf7a; color: #fff; border-color: #4faf7a; }
+
+    .chat {
+      display: grid;
+      gap: 14px;
+    }
+
+    .bubble-row { display: grid; grid-template-columns: 48px 1fr; gap: 12px; align-items: start; }
+    .bubble-avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 999px;
+      overflow: hidden;
+      display: grid;
+      place-items: center;
+      color: #fff;
+      font-weight: 900;
+      background: linear-gradient(135deg, #74d99b, #88a7ff);
+      border: 3px solid #fff;
+    }
+    .bubble-avatar img { width: 100%; height: 100%; object-fit: cover; }
+    .bubble {
+      padding: 14px 16px;
+      border-radius: 20px;
       background: #fff;
+      border: 1px solid rgba(91, 122, 145, .14);
+      line-height: 1.7;
+      color: #405064;
     }
+    .bubble strong { color: var(--leaf-dark); }
 
-    .metric b { font-size: 22px; display: block; }
-    .metric span { color: var(--muted); font-size: 12px; line-height: 1.4; }
-    .score-main b { color: var(--brand-dark); }
-    .good b { color: var(--good); }
-    .warn b { color: var(--warn); }
-
-    .list { display: grid; gap: 8px; margin: 0; padding: 0; list-style: none; }
-
-    .list li {
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      padding: 10px 12px;
-      background: #fff;
-      line-height: 1.55;
-      font-size: 13px;
+    .progress-card { display: grid; gap: 12px; }
+    .growth {
+      min-height: 220px;
+      border-radius: 22px;
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(180deg, #e9fcff 0%, #f8fff1 58%, #bdecc6 100%);
+      border: 1px solid rgba(91, 122, 145, .12);
     }
-
-    .result-card {
-      border: 1px solid #c7d2fe;
-      background: #eef2ff;
-      border-radius: 8px;
-      padding: 16px;
+    .sprout {
+      position: absolute;
+      left: 50%;
+      bottom: 44px;
+      width: 8px;
+      height: calc(34px + var(--stage) * 24px);
+      border-radius: 999px;
+      background: #3fa66d;
+      transform: translateX(-50%);
+      transition: height .35s ease;
     }
+    .sprout::before, .sprout::after {
+      content: "";
+      position: absolute;
+      width: calc(32px + var(--stage) * 12px);
+      height: calc(24px + var(--stage) * 7px);
+      top: 16px;
+      background: #69c98e;
+      border-radius: 70% 30% 70% 30%;
+      opacity: calc(.46 + var(--stage) * .1);
+    }
+    .sprout::before { right: 2px; transform: rotate(-24deg); }
+    .sprout::after { left: 2px; transform: rotate(204deg); }
+    .ground { position: absolute; left: 0; right: 0; bottom: 0; height: 54px; background: #9eddad; border-radius: 50% 50% 0 0; }
 
+    .status-list { display: grid; gap: 8px; margin: 0; padding: 0; list-style: none; }
+    .status-list li { padding: 11px 12px; border-radius: 16px; background: rgba(255,255,255,.74); border: 1px solid rgba(91, 122, 145, .12); line-height: 1.55; }
+
+    .result {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(300px, .72fr);
+      gap: 18px;
+    }
     .resume-paper {
       background: #fff;
-      border: 1px solid #b8bcc6;
-      border-radius: 2px;
-      padding: 24px 30px;
+      border: 1px solid #c9cdd6;
+      border-radius: 6px;
+      padding: 26px 32px;
       min-height: 360px;
-      box-shadow: 0 8px 20px rgba(15, 23, 42, 0.08);
+      box-shadow: 0 14px 32px rgba(38, 52, 71, .12);
     }
-
-    .resume-paper h3 {
-      margin: 0 0 10px;
-      padding-bottom: 6px;
-      border-bottom: 1px solid #111827;
-      font-size: 15px;
-    }
-
-    .resume-paper h4 { margin: 12px 0 8px; font-size: 14px; }
-    .resume-paper ul { margin: 0; padding-left: 18px; }
-    .resume-paper li { margin: 0 0 7px; line-height: 1.55; font-size: 13px; }
+    .resume-paper h3 { margin: 0 0 10px; padding-bottom: 8px; border-bottom: 1px solid #263447; font-size: 16px; }
+    .resume-paper h4 { margin: 12px 0 8px; font-size: 15px; }
+    .resume-paper li { margin-bottom: 8px; line-height: 1.6; }
 
     .hidden { display: none !important; }
 
-    .footer-note {
-      text-align: center;
-      color: var(--muted);
-      font-size: 12px;
-      padding: 8px 0 20px;
+    @media (max-width: 980px) {
+      .page { grid-template-columns: 1fr; }
+      .sidebar { position: static; height: auto; }
+      .journey { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .hero-content, .split, .result { grid-template-columns: 1fr; }
+      .tree { opacity: .35; right: -8%; }
     }
 
-    @media (max-width: 920px) {
-      .shell { grid-template-columns: 1fr; }
-      .sidebar { position: static; height: auto; border-right: 0; border-bottom: 1px solid var(--line); }
-      .step-list { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-      main { padding: 20px; }
-      .hero, .two-col, .choice-grid, .eval-grid { grid-template-columns: 1fr; }
-    }
-
-    @media (max-width: 560px) {
-      .step-list { grid-template-columns: 1fr; }
-      h1 { font-size: 24px; }
-      .hero-main, .panel { padding: 18px; }
+    @media (max-width: 600px) {
       main { padding: 14px; }
+      .hero-content { padding: 22px; }
+      h1 { font-size: 31px; }
+      .journey { grid-template-columns: 1fr; }
     }
   </style>
 </head>
 <body>
-  <div class="shell">
+  <div class="page">
     <aside class="sidebar">
-      <div class="brand"><div class="brand-mark">RA</div><span>ResumeAgent</span></div>
-      <p class="tagline">面向低经历大学生的对话式简历启动器。MVP 版本重点展示产品流程和核心机制。</p>
-      <div class="step-list" id="stepList"></div>
+      <div class="brand">
+        <div class="brand-mark">灵</div>
+        <div>
+          <div class="brand-title">灵秀花园</div>
+        </div>
+      </div>
+      <p class="brand-sub">一个给低经历学生的轻松对话空间。先不急着写简历，我们一起把能写的经历慢慢养出来。</p>
+      <p class="map-title">今天的小路</p>
+      <div class="journey" id="journey"></div>
     </aside>
 
     <main>
-      <div class="workspace">
-        <section class="hero">
-          <div class="hero-main">
-            <div class="eyebrow">MVP Prototype</div>
-            <h1>先帮你找到一段能写的经历，再把它写成可信简历表达</h1>
-            <p class="lead">这个原型验证“低压力进入 - 经历盘点 - 价值评估 - 关键追问 - 简历转译 - 复盘反馈”的产品闭环。它不追求完美简历，而是展示如何把普通经历转成可表达材料。</p>
+      <div class="garden">
+        <section class="hero" id="hero">
+          <div class="cloud one"></div>
+          <div class="cloud two"></div>
+          <div class="tree" id="heroTree">
+            <div class="leaf a"></div>
+            <div class="leaf b"></div>
+            <div class="leaf c"></div>
+            <div class="leaf d"></div>
+            <div class="trunk"></div>
           </div>
+
+          <div class="hero-content">
+            <div class="welcome">
+              <div class="eyebrow">欢迎来到灵秀花园</div>
+              <h1>你不是没有经历，只是还没在一个安心的地方把它说出来。</h1>
+              <p class="lead">这里不用一上来就会写简历。选一个你愿意聊天的形象，我们沿着小路慢慢回想：你做过什么、帮过谁、留下了什么。最后，把它摘成一张可以放进简历的经历卡。</p>
+              <div class="soft-tags">
+                <span class="soft-tag">低压力聊天</span>
+                <span class="soft-tag">每次只问一个小问题</span>
+                <span class="soft-tag">只拔高表达，不虚构事实</span>
+              </div>
+            </div>
+
+            <div class="companion-card">
+              <div class="avatar-stage">
+                <div class="avatar-preview" id="avatarPreview">灵</div>
+              </div>
+              <h2 class="card-title">创建今天陪你聊天的人</h2>
+              <p class="card-note">可以上传一个让你安心的头像。它会陪你走完整段经历整理旅程。</p>
+              <label class="file-label" for="avatarInput">上传一个想聊天的形象</label>
+              <input id="avatarInput" type="file" accept="image/*" />
+              <div class="field">
+                <label for="nicknameInput">我该怎么称呼你？</label>
+                <input id="nicknameInput" type="text" placeholder="比如：思思、Sijie、同学" />
+              </div>
+              <div class="btn-row">
+                <button class="btn" id="startBtn">开始轻轻聊一下</button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="split hidden" id="chatSection">
           <div class="panel">
-            <h2 class="section-title">核心设计</h2>
-            <p class="section-note">不是让 AI 直接编简历，而是先判断经历值不值得写、缺什么，再补一个关键事实。</p>
-            <div class="proof-grid">
-              <div class="proof-item"><strong>低压力分流</strong><span>允许用户不知道岗位，也不知道写什么。</span></div>
-              <div class="proof-item"><strong>贯穿式价值评估</strong><span>先筛选、再补洞、最后定表达边界。</span></div>
-              <div class="proof-item"><strong>不虚构事实</strong><span>只拔高表达，不拔高事实。</span></div>
+            <h2 class="panel-title">花园里的第一段对话</h2>
+            <p class="panel-note">不用正式回答，想到什么说什么。这里不是面试，只是一起找一颗可以发芽的经历种子。</p>
+            <div class="chat">
+              <div class="bubble-row">
+                <div class="bubble-avatar" id="chatAvatar">灵</div>
+                <div class="bubble" id="guideBubble"><strong>灵秀：</strong>我们先从很小的一件事开始。最近有没有一件你帮别人做过、参与过、整理过的小事？</div>
+              </div>
             </div>
+
+            <div class="field">
+              <label>你以后可能想往哪个方向投？不确定也可以跳过。</label>
+              <div class="chips" id="roleChips"></div>
+            </div>
+
+            <div class="field">
+              <label>如果想不起来，可以先点几个线索</label>
+              <div class="chips" id="seedChips"></div>
+            </div>
+
+            <div class="field">
+              <label for="experienceInput">随便说一句这件事</label>
+              <textarea id="experienceInput" placeholder="比如：我帮老师整理过学生名单和一些表格，后来老师拿去做统计。"></textarea>
+            </div>
+            <div class="btn-row">
+              <button class="btn" id="evaluateBtn">看看这颗种子能不能发芽</button>
+              <button class="btn secondary" id="exampleBtn">填入一个示例</button>
+            </div>
+          </div>
+
+          <div class="panel progress-card">
+            <h2 class="panel-title">小树正在长</h2>
+            <p class="panel-note">每补充一个关键事实，经历就会更清楚一点。</p>
+            <div class="growth" id="growthBox">
+              <div class="sprout" id="sprout"></div>
+              <div class="ground"></div>
+            </div>
+            <ul class="status-list" id="stateList"></ul>
           </div>
         </section>
 
-        <section class="panel" id="stepTarget">
-          <h2 class="section-title">Step 1｜你大概想投什么方向？</h2>
-          <p class="section-note">不确定也没关系，系统会按通用职场能力帮你先做一版。</p>
-          <div class="chips" id="roleChips"></div>
-        </section>
-
-        <section class="panel" id="stepStatus">
-          <h2 class="section-title">Step 2｜你现在有想写的经历吗？</h2>
-          <p class="section-note">有就直接写；没有就先盘点。这个分流是为了降低一上来写简历的压力。</p>
-          <div class="choice-grid">
-            <div class="choice-card" data-status="has">
-              <strong>有，我想写这一段</strong>
-              <span>适合已经知道想写实习、课程项目、社团活动等具体经历的人。</span>
-            </div>
-            <div class="choice-card" data-status="unknown">
-              <strong>没有/不确定，帮我找找</strong>
-              <span>适合觉得自己没经历，或者不知道哪些普通小事能写的人。</span>
-            </div>
+        <section class="panel hidden" id="evaluationSection">
+          <h2 class="panel-title">它已经有一点轮廓了</h2>
+          <p class="panel-note">灵秀会先判断这段经历能不能写、还缺哪一个关键事实。前台说得轻，后台做的是价值评估。</p>
+          <ul class="status-list" id="evaluationList"></ul>
+          <div class="bubble-row" style="margin-top: 16px;">
+            <div class="bubble-avatar" id="questionAvatar">灵</div>
+            <div class="bubble" id="nextQuestion"></div>
+          </div>
+          <div class="field">
+            <label for="followupInput">补一点点就好</label>
+            <input id="followupInput" type="text" placeholder="比如：大概 80 份，老师拿去做期末统计" />
+          </div>
+          <div class="btn-row">
+            <button class="btn" id="generateBtn">摘下一张经历卡</button>
           </div>
         </section>
 
-        <section class="panel hidden" id="stepInventory">
-          <h2 class="section-title">Step 3｜经历盘点与筛选</h2>
-          <p class="section-note">选 1-3 个做过的事情，系统会推荐一件最值得先深挖的经历。</p>
-          <div class="chips" id="inventoryChips"></div>
-          <div class="status-box hidden" id="recommendBox">
-            <h3 id="recommendTitle"></h3>
-            <p id="recommendReason"></p>
-            <div class="actions">
-              <button class="btn primary" id="useRecommendationBtn">用这段经历继续</button>
-            </div>
-          </div>
-        </section>
-
-        <section class="two-col hidden" id="stepInput">
+        <section class="result hidden" id="resultSection">
           <div class="panel">
-            <h2 class="section-title">Step 4｜用一句话说说这件事</h2>
-            <p class="section-note">不用正式，像聊天一样说就行。例：我帮老师整理过学生名单，后来老师拿去统计。</p>
-            <div class="form-row">
-              <label for="experienceInput">经历描述</label>
-              <textarea id="experienceInput" placeholder="随便说一句：我做过什么、帮谁做、后来有什么用...之类都可以"></textarea>
-            </div>
-            <div class="actions">
-              <button class="btn primary" id="evaluateBtn">开始价值评估</button>
-              <button class="btn ghost" id="fillExampleBtn">填入示例</button>
-            </div>
-          </div>
-
-          <div class="panel">
-            <h2 class="section-title">当前状态</h2>
-            <p class="section-note">这里会显示系统如何理解你的岗位、经历入口和推荐方向。</p>
-            <ul class="list" id="stateList"></ul>
-          </div>
-        </section>
-
-        <section class="panel hidden" id="stepEvaluate">
-          <h2 class="section-title">Step 5｜经历价值评估</h2>
-          <p class="section-note">后台判断这段经历适合放在哪里、当前优势是什么、还缺什么信息。</p>
-          <div class="eval-grid">
-            <div class="metric score-main"><b id="scoreText">-</b><span>经历可写性评分</span></div>
-            <div class="metric good"><b id="levelText">-</b><span>推荐定位</span></div>
-            <div class="metric warn"><b id="sectionText">-</b><span>建议简历位置</span></div>
-          </div>
-          <div class="two-col" style="margin-top: 14px;">
-            <div>
-              <h3 class="section-title">当前优势</h3>
-              <ul class="list" id="strengthList"></ul>
-            </div>
-            <div>
-              <h3 class="section-title">当前缺口</h3>
-              <ul class="list" id="weaknessList"></ul>
-            </div>
-          </div>
-          <div class="status-box">
-            <h3>关键追问</h3>
-            <p id="nextQuestionText"></p>
-            <div class="form-row">
-              <label for="followupInput">补充回答</label>
-              <input id="followupInput" placeholder="比如：大概 80 份，老师拿去做期末统计" />
-            </div>
-            <div class="actions">
-              <button class="btn primary" id="generateBtn">生成简历表达</button>
-            </div>
-          </div>
-        </section>
-
-        <section class="two-col hidden" id="stepResult">
-          <div class="panel">
-            <h2 class="section-title">Step 6｜简历表达</h2>
-            <p class="section-note">只使用用户提供过的事实，不写主导、负责、显著提升这类无依据表达。</p>
+            <h2 class="panel-title">你的经历卡成熟了</h2>
+            <p class="panel-note">这不是编出来的简历，而是从你说过的事实里整理出来的表达。</p>
             <div class="resume-paper">
-              <h3 id="resumeSectionTitle">经历</h3>
-              <h4 id="resumeExperienceTitle">经历标题</h4>
-              <ul id="resumeBullets"></ul>
+              <h3 id="resumeSection">校园/项目经历</h3>
+              <h4 id="resumeTitle">经历整理与支持</h4>
+              <ul id="bulletList"></ul>
             </div>
           </div>
           <div class="panel">
-            <h2 class="section-title">复盘报告</h2>
-            <p class="section-note">给用户看：为什么这段能写、哪里不能夸大、下一步怎么补强。</p>
-            <div class="result-card">
-              <h3 class="section-title">经历卡片</h3>
-              <ul class="list" id="experienceCardList"></ul>
-            </div>
-            <div class="status-box">
-              <h3>不虚构边界</h3>
-              <p id="truthBoundary"></p>
-            </div>
-            <div class="status-box">
-              <h3>下一步补强</h3>
-              <p id="improvementText"></p>
-            </div>
-            <div class="actions">
-              <button class="btn secondary" id="restartBtn">重新体验一遍</button>
+            <h2 class="panel-title">花园记录</h2>
+            <ul class="status-list" id="reportList"></ul>
+            <div class="btn-row">
+              <button class="btn secondary" id="restartBtn">重新走一遍小路</button>
             </div>
           </div>
         </section>
-
-        <div class="footer-note">MVP 演示版：流程优先，生成质量后续通过多轮对话、岗位表达规则库和后端 prompt pipeline 继续优化。</div>
       </div>
     </main>
   </div>
 
   <script>
     const roles = [
-      { id: 'ops', label: '运营/新媒体/内容', focus: ['内容发布', '活动执行', '用户反馈', '数据记录'] },
-      { id: 'admin', label: '行政/助理/文职', focus: ['资料整理', '表格核对', '通知对接', '归档管理'] },
-      { id: 'sales', label: '销售/客服/用户沟通', focus: ['接待服务', '客户沟通', '需求记录', '反馈跟进'] },
-      { id: 'pm', label: '产品/项目助理', focus: ['流程梳理', '需求记录', '协作推进', '问题反馈'] },
-      { id: 'edu', label: '教育/教务/培训', focus: ['学生沟通', '课程支持', '资料整理', '活动组织'] },
-      { id: 'finance', label: '金融/财务/数据助理', focus: ['数据准确性', '资料核对', '信息整理', '细致度'] },
-      { id: 'general', label: '暂时不确定', focus: ['信息整理', '执行支持', '沟通协作', '基础数据处理'] }
+      { id: 'general', label: '暂时不确定', focus: '通用职场能力' },
+      { id: 'pm', label: '产品/项目助理', focus: '流程梳理和协作推进' },
+      { id: 'ops', label: '运营/新媒体/内容', focus: '内容发布和活动执行' },
+      { id: 'admin', label: '行政/助理/文职', focus: '资料整理和信息核对' },
+      { id: 'edu', label: '教育/教务/培训', focus: '学生沟通和课程支持' },
+      { id: 'finance', label: '金融/财务/数据助理', focus: '数据准确性和资料核对' }
     ];
 
-    const inventoryTypes = [
-      { id: 'intern', label: '公司实习/兼职', priority: 90, reason: '它有真实组织场景，通常更容易聊出具体任务和结果。' },
-      { id: 'course', label: '课程作业/小组项目', priority: 76, reason: '它通常能聊出任务分工、具体动作和最终产出。' },
-      { id: 'content', label: '账号运营/内容发布', priority: 74, reason: '它容易和内容、运营、数据记录等岗位方向连接起来。' },
-      { id: 'club', label: '社团/班级事务', priority: 68, reason: '它有真实协作场景，适合挖活动执行和沟通对接。' },
-      { id: 'volunteer', label: '志愿活动/校园活动', priority: 60, reason: '它可以体现执行支持、服务对象和活动现场协作。' },
-      { id: 'competition', label: '比赛/证书/训练营', priority: 58, reason: '它有明确学习或参赛背景，适合作为补充经历继续深挖。' },
-      { id: 'teacher', label: '帮老师或同学做事', priority: 52, reason: '它可以作为经历线索，适合挖资料整理、信息核对和支持价值。' },
-      { id: 'project', label: '自己做过的小作品', priority: 50, reason: '如果能说清目标和产出，它可以作为项目经历继续挖。' },
-      { id: 'unknown', label: '都不确定', priority: 20, reason: '先不硬找主经历，可以从很小的动作开始回想。' }
+    const seeds = [
+      { id: 'teacher', label: '帮老师做过事', weight: 52 },
+      { id: 'course', label: '课程小组项目', weight: 76 },
+      { id: 'club', label: '社团/班级事务', weight: 68 },
+      { id: 'content', label: '发过内容/账号', weight: 74 },
+      { id: 'intern', label: '实习/兼职', weight: 90 },
+      { id: 'volunteer', label: '志愿活动', weight: 60 },
+      { id: 'project', label: '自己做的小作品', weight: 64 }
     ];
 
-    const steps = [
-      ['1', '目标方向', '明确岗位或通用求职'],
-      ['2', '经历入口', '有经历直接写，没有先盘点'],
-      ['3', '经历筛选', '推荐一件先深挖'],
-      ['4', '口语输入', '用一句话说清经历'],
-      ['5', '价值评估', '判断优势、缺口和追问'],
-      ['6', '转译输出', '简历表达与复盘报告']
+    const journey = [
+      ['入口', '选一个愿意聊天的形象'],
+      ['种子', '找到一件普通小事'],
+      ['发芽', '补一个关键事实'],
+      ['经历卡', '转成简历表达']
     ];
 
     const state = {
-      activeStep: 1,
-      role: roles[6],
-      status: '',
-      selectedTypes: [],
-      recommendedType: null,
-      experienceText: '',
-      followupText: '',
+      step: 1,
+      name: '',
+      avatar: '',
+      role: roles[0],
+      selectedSeeds: [],
       evaluation: null
     };
 
     const $ = (id) => document.getElementById(id);
 
-    function setActiveStep(step, scrollTarget) {
-      state.activeStep = step;
-      renderSteps();
-      if (scrollTarget) {
-        setTimeout(() => scrollTarget.scrollIntoView({ behavior: 'smooth', block: 'start' }), 60);
+    function renderJourney() {
+      $('journey').innerHTML = journey.map((item, index) => {
+        const num = index + 1;
+        const klass = num === state.step ? 'active' : num < state.step ? 'done' : '';
+        return `<div class="node ${klass}"><div class="node-dot">${num < state.step ? '✓' : num}</div><div><div class="node-name">${item[0]}</div><div class="node-desc">${item[1]}</div></div></div>`;
+      }).join('');
+      document.documentElement.style.setProperty('--stage', Math.max(0, state.step - 1));
+      document.querySelectorAll('.leaf').forEach((leaf, index) => {
+        leaf.style.setProperty('--grow', state.step > index ? '1' : '.72');
+        leaf.style.setProperty('--opacity', state.step > index ? '.92' : '.46');
+      });
+    }
+
+    function renderAvatar(target) {
+      if (state.avatar) {
+        target.innerHTML = `<img src="${state.avatar}" alt="聊天头像" />`;
+      } else {
+        target.textContent = '灵';
       }
     }
 
-    function renderSteps() {
-      $('stepList').innerHTML = steps.map((step, index) => {
-        const num = index + 1;
-        const klass = num === state.activeStep ? 'active' : num < state.activeStep ? 'done' : '';
-        return `
-          <div class="step-item ${klass}">
-            <div class="step-num">${step[0]}</div>
-            <div><div class="step-title">${step[1]}</div><div class="step-desc">${step[2]}</div></div>
-          </div>
-        `;
-      }).join('');
+    function syncAvatars() {
+      ['avatarPreview', 'chatAvatar', 'questionAvatar'].forEach((id) => renderAvatar($(id)));
     }
 
     function renderRoleChips() {
@@ -547,266 +665,171 @@
           state.role = roles.find((role) => role.id === btn.dataset.role);
           renderRoleChips();
           renderState();
-          setActiveStep(Math.max(state.activeStep, 2), $('stepStatus'));
         };
       });
     }
 
-    function renderInventoryChips() {
-      $('inventoryChips').innerHTML = inventoryTypes.map((type) => `<button class="chip ${state.selectedTypes.includes(type.id) ? 'selected' : ''}" data-type="${type.id}">${type.label}</button>`).join('');
-      document.querySelectorAll('[data-type]').forEach((btn) => {
+    function renderSeedChips() {
+      $('seedChips').innerHTML = seeds.map((seed) => `<button class="chip ${state.selectedSeeds.includes(seed.id) ? 'selected' : ''}" data-seed="${seed.id}">${seed.label}</button>`).join('');
+      document.querySelectorAll('[data-seed]').forEach((btn) => {
         btn.onclick = () => {
-          const id = btn.dataset.type;
-          if (state.selectedTypes.includes(id)) {
-            state.selectedTypes = state.selectedTypes.filter((item) => item !== id);
-          } else if (state.selectedTypes.length < 3) {
-            state.selectedTypes.push(id);
-          }
-          state.recommendedType = recommendType();
-          renderInventoryChips();
-          renderRecommendation();
+          const id = btn.dataset.seed;
+          if (state.selectedSeeds.includes(id)) state.selectedSeeds = state.selectedSeeds.filter((item) => item !== id);
+          else if (state.selectedSeeds.length < 3) state.selectedSeeds.push(id);
+          renderSeedChips();
           renderState();
+          if (!$('experienceInput').value.trim()) {
+            const selected = seeds.find((seed) => seed.id === id);
+            $('experienceInput').placeholder = `比如：我做过${selected.label}，当时主要是...`;
+          }
         };
       });
-    }
-
-    function recommendType() {
-      const selected = inventoryTypes.filter((type) => state.selectedTypes.includes(type.id));
-      if (!selected.length) return null;
-      const roleBoost = {
-        ops: ['content', 'club', 'intern'],
-        admin: ['teacher', 'intern', 'club'],
-        sales: ['intern', 'volunteer', 'club'],
-        pm: ['course', 'project', 'intern'],
-        edu: ['teacher', 'volunteer', 'club'],
-        finance: ['intern', 'teacher', 'course'],
-        general: ['intern', 'course', 'content']
-      }[state.role.id] || [];
-      return selected
-        .map((type) => ({ ...type, score: type.priority + (roleBoost.includes(type.id) ? 12 : 0) }))
-        .sort((a, b) => b.score - a.score)[0];
-    }
-
-    function renderRecommendation() {
-      const box = $('recommendBox');
-      if (!state.recommendedType) {
-        box.classList.add('hidden');
-        return;
-      }
-      box.classList.remove('hidden');
-      $('recommendTitle').textContent = `建议先写：${state.recommendedType.label}`;
-      $('recommendReason').textContent = `${state.recommendedType.reason} 先把这件事聊清楚，再判断能否作为主经历。`;
-      $('experienceInput').placeholder = `比如：我做过${state.recommendedType.label}，主要做了...`;
     }
 
     function renderState() {
-      const statusText = state.status === 'has' ? '有明确想写的经历' : state.status === 'unknown' ? '需要先盘点筛选' : '尚未选择';
-      const rec = state.recommendedType ? state.recommendedType.label : '暂无推荐';
+      const selected = state.selectedSeeds.map((id) => seeds.find((seed) => seed.id === id)?.label).filter(Boolean);
       $('stateList').innerHTML = [
-        `目标方向：${state.role.label}`,
-        `经历入口：${statusText}`,
-        `推荐经历：${rec}`,
-        '生成原则：不虚构事实，只拔高表达'
+        `今天称呼：${state.name || '还没告诉灵秀'}`,
+        `可能方向：${state.role.label}`,
+        `经历线索：${selected.length ? selected.join('、') : '还在找种子'}`,
+        '花园规则：只拔高表达，不拔高事实'
       ].map((item) => `<li>${item}</li>`).join('');
     }
 
-    function showInput(step = 4, scroll = true) {
-      $('stepInput').classList.remove('hidden');
-      setActiveStep(step, scroll ? $('stepInput') : null);
+    function setStep(step, target) {
+      state.step = step;
+      renderJourney();
+      if (target) setTimeout(() => target.scrollIntoView({ behavior: 'smooth', block: 'start' }), 80);
     }
 
-    function setupStatusCards() {
-      document.querySelectorAll('[data-status]').forEach((card) => {
-        card.onclick = () => {
-          state.status = card.dataset.status;
-          state.selectedTypes = [];
-          state.recommendedType = null;
-          $('stepEvaluate').classList.add('hidden');
-          $('stepResult').classList.add('hidden');
-          document.querySelectorAll('[data-status]').forEach((item) => item.classList.remove('selected'));
-          card.classList.add('selected');
-
-          if (state.status === 'unknown') {
-            $('stepInventory').classList.remove('hidden');
-            $('stepInput').classList.add('hidden');
-            renderInventoryChips();
-            renderRecommendation();
-            setActiveStep(3, $('stepInventory'));
-          } else {
-            $('stepInventory').classList.add('hidden');
-            showInput(4);
-          }
-          renderState();
-        };
-      });
+    function startChat() {
+      state.name = $('nicknameInput').value.trim() || '同学';
+      syncAvatars();
+      $('guideBubble').innerHTML = `<strong>${state.name}，我们先不急着写简历。</strong><br />你可以把这里当成一个小花园。先随便说一件做过的小事，我来陪你看看它能不能长成一张经历卡。`;
+      $('chatSection').classList.remove('hidden');
+      renderState();
+      setStep(2, $('chatSection'));
     }
 
     function includesAny(text, words) {
       return words.some((word) => text.includes(word));
     }
 
-    function evaluateExperience() {
+    function evaluate() {
       const text = $('experienceInput').value.trim();
       if (!text) {
         $('experienceInput').focus();
         return;
       }
-      state.experienceText = text;
-      const typeLabel = state.recommendedType?.label || (state.status === 'has' ? '用户自选经历' : '普通校园经历');
-      const hasAction = includesAny(text, ['整理', '核对', '记录', '对接', '通知', '发布', '收集', '分类', '维护', '协助', '参与', '完成', '跟进', '写', '做']);
+      const seedScore = state.selectedSeeds
+        .map((id) => seeds.find((seed) => seed.id === id)?.weight || 0)
+        .sort((a, b) => b - a)[0] || 48;
+      const hasAction = includesAny(text, ['整理', '核对', '记录', '对接', '通知', '发布', '收集', '分类', '维护', '协助', '参与', '完成', '跟进', '写', '做', '帮']);
+      const hasResult = includesAny(text, ['后来', '用于', '支持', '帮助', '完成', '统计', '发布', '交付', '报名', '展示', '汇报', '拿去']);
       const hasNumber = /\d|一|二|三|四|五|六|七|八|九|十|百|千|万|多|几/.test(text);
-      const hasResult = includesAny(text, ['后来', '用于', '支持', '帮助', '完成', '统计', '发布', '交付', '报名', '复盘', '展示', '汇报']);
-      const hasScene = text.length >= 10 || Boolean(state.recommendedType);
-      const roleKnown = includesAny(text, ['我', '自己', '协助', '参与', '负责', '完成', '帮']);
-      const roleRelevance = state.role.id === 'general' ? 7 : 10;
-
-      const dimension = {
-        specificity: hasScene && hasAction ? 16 : hasAction ? 12 : 7,
-        role: roleKnown ? 13 : 7,
-        impact: hasResult ? 14 : 7,
-        scale: hasNumber ? 11 : 3,
-        relevance: roleRelevance,
-        expression: hasAction ? 8 : 4
-      };
-      const score = Object.values(dimension).reduce((sum, item) => sum + item, 0);
-      const level = score >= 80 ? '主经历' : score >= 60 ? '可写经历' : score >= 40 ? '辅助经历' : '暂不建议主写';
-      const missing = !hasAction ? '具体动作' : !hasResult ? '结果用途' : !hasNumber ? '数量规模' : state.role.id === 'general' ? '岗位方向' : '表达补强';
-      const nextQuestion = missing === '具体动作'
+      const score = Math.min(92, seedScore + (hasAction ? 10 : 0) + (hasResult ? 10 : 0) + (hasNumber ? 8 : 0) + (state.role.id !== 'general' ? 4 : 0));
+      const level = score >= 80 ? '可以作为主经历继续深挖' : score >= 62 ? '可以写，但还需要补实一点' : '适合作为辅助经历或继续寻找更强线索';
+      const missing = !hasAction ? '具体动作' : !hasResult ? '结果用途' : !hasNumber ? '数量规模' : '表达重点';
+      const question = missing === '具体动作'
         ? '你当时具体动手做的第一步是什么？很小的一步也可以。'
         : missing === '结果用途'
-          ? '你做完之后，这个东西后来给谁用了，或者被拿去做什么？'
+          ? '你做完之后，这个东西后来给谁用了，或者帮别人省了哪一步？'
           : missing === '数量规模'
-            ? '这件事大概涉及多少人、多少份资料、几次活动，或者持续了多久？'
-            : missing === '岗位方向'
-              ? '如果之后投简历，你更想让别人看到你会整理信息、沟通协作，还是执行落地？'
-              : '这件事里有没有一个最能说明你做过事的小细节？';
+            ? '这件事大概涉及多少人、多少份资料、几次活动，或者持续了多久？大概数也可以。'
+            : `如果按${state.role.focus}来写，你觉得这件事里最能说明你的细节是哪一个？`;
+      state.evaluation = { text, score, level, missing, question, hasNumber, hasResult };
 
-      state.evaluation = {
-        score,
-        level,
-        section: level === '主经历' ? '项目/实习经历' : level === '可写经历' ? '校园/项目经历' : '辅助经历',
-        typeLabel,
-        strengths: [
-          hasScene ? '有可识别的真实场景' : '已经有初步经历线索',
-          hasAction ? '有可转译的基础动作' : '还需要补充具体动作',
-          state.role.id !== 'general' ? `可以按「${state.role.label}」调整表达重点` : '可先按通用职场能力表达'
-        ],
-        weaknesses: [
-          hasNumber ? '已有初步规模信息' : '缺少数量、周期或规模',
-          hasResult ? '已有结果或用途线索' : '缺少结果、用途或影响对象',
-          roleKnown ? '角色贡献有初步线索' : '用户个人贡献边界还不够清楚'
-        ],
-        missing,
-        nextQuestion
-      };
-      renderEvaluation();
+      $('evaluationList').innerHTML = [
+        `这颗种子的可写性：${score} 分`,
+        `当前判断：${level}`,
+        `它已经有的东西：真实场景、用户动作、可被转译的经历线索`,
+        `还差的一点：${missing}`
+      ].map((item) => `<li>${item}</li>`).join('');
+      $('nextQuestion').innerHTML = `<strong>我再轻轻问一个问题：</strong><br />${question}`;
+      $('evaluationSection').classList.remove('hidden');
+      setStep(3, $('evaluationSection'));
     }
 
-    function renderEvaluation() {
-      const ev = state.evaluation;
-      $('stepEvaluate').classList.remove('hidden');
-      $('scoreText').textContent = ev.score;
-      $('levelText').textContent = ev.level;
-      $('sectionText').textContent = ev.section;
-      $('strengthList').innerHTML = ev.strengths.map((item) => `<li>${item}</li>`).join('');
-      $('weaknessList').innerHTML = ev.weaknesses.map((item) => `<li>${item}</li>`).join('');
-      $('nextQuestionText').textContent = ev.nextQuestion;
-      setActiveStep(5, $('stepEvaluate'));
-    }
-
-    function buildBullet() {
-      const ev = state.evaluation;
-      const role = state.role;
-      const text = state.experienceText;
+    function generate() {
+      if (!state.evaluation) return;
+      const text = state.evaluation.text;
       const follow = $('followupInput').value.trim();
       const action = includesAny(text, ['核对']) ? '核对' : includesAny(text, ['发布']) ? '发布' : includesAny(text, ['记录']) ? '记录' : includesAny(text, ['通知']) ? '通知并对接' : '整理';
       const object = text.includes('表格') ? '表格信息' : text.includes('名单') ? '名单资料' : text.includes('活动') ? '活动信息' : text.includes('内容') ? '内容素材' : '相关资料';
-      const hasFollowNumber = /\d|一|二|三|四|五|六|七|八|九|十|百|千|万|多|几/.test(follow);
-      const roleFocus = role.focus[0];
-      const suffix = follow ? `，${follow.replace(/[。.!！]$/g, '')}` : `，支持${roleFocus}`;
-      const prefix = ev.level === '主经历' ? '参与' : '协助';
+      const prefix = state.evaluation.score >= 80 ? '参与' : '协助';
+      const suffix = follow ? `，${follow.replace(/[。.!！]$/g, '')}` : `，支持${state.role.focus}`;
       const bullet1 = `${prefix}${action}${object}${suffix}`;
-      const bullet2 = hasFollowNumber
-        ? `围绕${roleFocus}完成基础信息记录，保证材料准确可追溯`
-        : `配合完成${roleFocus}相关事务，沉淀基础执行与信息整理经验`;
-      return [bullet1, bullet2];
+      const bullet2 = `围绕${state.role.focus}完成基础信息整理与执行支持，沉淀细致核对、沟通协作和结果交付意识`;
+
+      $('resumeSection').textContent = state.evaluation.score >= 80 ? '项目/实习经历' : '校园/项目经历';
+      $('resumeTitle').textContent = selectedTitle();
+      $('bulletList').innerHTML = [bullet1, bullet2].map((item) => `<li>${item}</li>`).join('');
+      $('reportList').innerHTML = [
+        `原始经历：${text}`,
+        `补充事实：${follow || '暂未补充，后续可以继续追问'}`,
+        `适合定位：${state.evaluation.level}`,
+        '不虚构边界：没有使用“主导、负责、显著提升”等缺少事实支撑的词',
+        '下一步：继续补充数量、周期、使用对象或真实反馈，让这张经历卡更扎实'
+      ].map((item) => `<li>${item}</li>`).join('');
+      $('resultSection').classList.remove('hidden');
+      setStep(4, $('resultSection'));
     }
 
-    function generateResult() {
-      if (!state.evaluation) return;
-      state.followupText = $('followupInput').value.trim();
-      const bullets = buildBullet();
-      const title = state.recommendedType?.label || '经历挖掘表达';
-      $('stepResult').classList.remove('hidden');
-      $('resumeSectionTitle').textContent = state.evaluation.section;
-      $('resumeExperienceTitle').textContent = title;
-      $('resumeBullets').innerHTML = bullets.map((item) => `<li>${item}</li>`).join('');
-      $('experienceCardList').innerHTML = [
-        `发生了什么：${state.experienceText || '用户提供了一段普通经历线索'}`,
-        `用户做了什么：${bullets[0]}`,
-        `当前优势：${state.evaluation.strengths.join('；')}`,
-        `当前缺口：${state.evaluation.weaknesses.join('；')}`
-      ].map((item) => `<li>${item}</li>`).join('');
-      $('truthBoundary').textContent = '本次表达没有使用“主导、负责、显著提升、优化”等缺少事实支撑的词，只基于用户提供的动作、对象和补充信息进行职业化转译。';
-      $('improvementText').textContent = state.evaluation.missing === '数量规模'
-        ? '下一步可以补充人数、份数、周期或频率，让经历更可信。'
-        : state.evaluation.missing === '结果用途'
-          ? '下一步可以补充这件事后来被谁使用，或者帮助别人完成了什么。'
-          : '下一步可以补充更具体的动作、工具和使用结果。';
-      setActiveStep(6, $('stepResult'));
+    function selectedTitle() {
+      const first = state.selectedSeeds[0];
+      return seeds.find((seed) => seed.id === first)?.label || '经历整理与支持';
     }
 
     function fillExample() {
-      state.role = roles[0];
-      state.status = 'unknown';
-      state.selectedTypes = ['teacher', 'content'];
-      state.recommendedType = recommendType();
+      state.role = roles[2];
+      state.selectedSeeds = ['teacher', 'content'];
       $('experienceInput').value = '我帮老师整理过学生名单和一些表格，后来老师拿去做统计。';
-      $('stepInventory').classList.remove('hidden');
-      $('stepInput').classList.remove('hidden');
-      document.querySelectorAll('[data-status]').forEach((item) => item.classList.toggle('selected', item.dataset.status === 'unknown'));
       renderRoleChips();
-      renderInventoryChips();
-      renderRecommendation();
+      renderSeedChips();
       renderState();
-      setActiveStep(4, $('stepInput'));
     }
 
     function restart() {
-      state.activeStep = 1;
-      state.role = roles[6];
-      state.status = '';
-      state.selectedTypes = [];
-      state.recommendedType = null;
-      state.experienceText = '';
-      state.followupText = '';
+      state.step = 1;
+      state.name = '';
+      state.role = roles[0];
+      state.selectedSeeds = [];
       state.evaluation = null;
+      $('nicknameInput').value = '';
       $('experienceInput').value = '';
       $('followupInput').value = '';
-      $('stepInventory').classList.add('hidden');
-      $('stepInput').classList.add('hidden');
-      $('stepEvaluate').classList.add('hidden');
-      $('stepResult').classList.add('hidden');
-      document.querySelectorAll('[data-status]').forEach((item) => item.classList.remove('selected'));
+      $('chatSection').classList.add('hidden');
+      $('evaluationSection').classList.add('hidden');
+      $('resultSection').classList.add('hidden');
       renderRoleChips();
-      renderInventoryChips();
-      renderRecommendation();
+      renderSeedChips();
       renderState();
-      renderSteps();
+      renderJourney();
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
-    $('evaluateBtn').onclick = evaluateExperience;
-    $('generateBtn').onclick = generateResult;
-    $('fillExampleBtn').onclick = fillExample;
-    $('restartBtn').onclick = restart;
-    $('useRecommendationBtn').onclick = () => showInput(4);
+    $('avatarInput').onchange = (event) => {
+      const file = event.target.files && event.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = () => {
+        state.avatar = reader.result;
+        syncAvatars();
+      };
+      reader.readAsDataURL(file);
+    };
 
-    renderSteps();
+    $('startBtn').onclick = startChat;
+    $('evaluateBtn').onclick = evaluate;
+    $('generateBtn').onclick = generate;
+    $('exampleBtn').onclick = fillExample;
+    $('restartBtn').onclick = restart;
+
+    renderJourney();
     renderRoleChips();
-    renderInventoryChips();
+    renderSeedChips();
     renderState();
-    setupStatusCards();
+    syncAvatars();
   </script>
 </body>
 </html>
