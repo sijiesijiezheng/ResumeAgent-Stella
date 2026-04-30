@@ -6,43 +6,157 @@
   <title>灵秀花园｜对话式简历启动器</title>
   <style>
     :root {
-      --sky: #e8fbff;
-      --mint: #d9f8ec;
-      --leaf: #4faf7a;
-      --leaf-dark: #237a55;
-      --sun: #fff3bf;
-      --peach: #ffd6c9;
-      --lavender: #ece7ff;
-      --ink: #263447;
-      --muted: #6b7687;
-      --line: rgba(69, 103, 130, 0.16);
-      --paper: rgba(255, 255, 255, 0.86);
-      --white: #ffffff;
-      --shadow: 0 22px 60px rgba(45, 80, 110, 0.16);
-      --radius: 24px;
+      --sky: #eafaff;
+      --mint: #dff8ed;
+      --leaf: #4eaf7a;
+      --leaf-dark: #246f53;
+      --ink: #253144;
+      --muted: #6a788b;
+      --line: rgba(76, 111, 135, .16);
+      --glass: rgba(255, 255, 255, .74);
+      --card: rgba(255, 255, 255, .88);
+      --shadow: 0 24px 70px rgba(54, 83, 112, .15);
+      --peach: #ffd9c9;
+      --gold: #fff2ad;
+      --lilac: #eee7ff;
     }
 
     * { box-sizing: border-box; }
-
+    html { scroll-behavior: smooth; }
     body {
       margin: 0;
       min-height: 100vh;
       color: var(--ink);
       font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", Arial, sans-serif;
       background:
-        radial-gradient(circle at 14% 12%, rgba(255, 243, 191, .95), transparent 24%),
-        radial-gradient(circle at 88% 8%, rgba(236, 231, 255, .9), transparent 28%),
-        linear-gradient(180deg, var(--sky) 0%, #f8fff7 56%, #fffaf3 100%);
+        radial-gradient(circle at 16% 14%, rgba(255, 242, 173, .95), transparent 21%),
+        radial-gradient(circle at 88% 10%, rgba(238, 231, 255, .92), transparent 26%),
+        linear-gradient(180deg, var(--sky), #fffaf1 78%);
+      overflow-x: hidden;
       letter-spacing: 0;
     }
 
     button, input, textarea { font: inherit; }
     button { border: 0; }
 
-    .page {
+    .intro {
+      min-height: 100vh;
+      position: relative;
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+      padding: 28px;
+    }
+
+    .intro::before {
+      content: "";
+      position: absolute;
+      inset: auto -10vw -18vh -10vw;
+      height: 42vh;
+      border-radius: 50% 50% 0 0;
+      background: linear-gradient(180deg, #b7efc8, #83d8a9);
+      box-shadow: inset 0 28px 60px rgba(255,255,255,.28);
+    }
+
+    .sun {
+      position: absolute;
+      width: 150px;
+      height: 150px;
+      left: 12vw;
+      top: 12vh;
+      border-radius: 50%;
+      background: rgba(255, 239, 151, .76);
+      box-shadow: 0 0 80px rgba(255, 225, 106, .44);
+      animation: pulse 4s ease-in-out infinite;
+    }
+
+    .cloud {
+      position: absolute;
+      width: 160px;
+      height: 52px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.72);
+      box-shadow: 44px 8px 0 rgba(255,255,255,.56), -34px 12px 0 rgba(255,255,255,.48);
+      animation: drift 18s linear infinite;
+    }
+    .cloud.one { top: 18vh; left: -12vw; }
+    .cloud.two { top: 29vh; right: -10vw; animation-duration: 23s; animation-direction: reverse; }
+
+    .butterfly {
+      position: absolute;
+      width: 18px;
+      height: 18px;
+      border-radius: 80% 20% 80% 20%;
+      background: #ffb3c6;
+      transform: rotate(25deg);
+      animation: flutter 9s ease-in-out infinite;
+    }
+    .butterfly::after {
+      content: "";
+      position: absolute;
+      width: 18px;
+      height: 18px;
+      left: 11px;
+      top: -2px;
+      border-radius: 20% 80% 20% 80%;
+      background: #a5b4fc;
+    }
+    .butterfly.a { left: 18vw; top: 60vh; }
+    .butterfly.b { right: 20vw; top: 34vh; animation-delay: -3s; transform: scale(.78) rotate(25deg); }
+
+    .intro-card {
+      position: relative;
+      z-index: 2;
+      width: min(760px, 92vw);
+      min-height: 430px;
+      display: grid;
+      place-items: center;
+      text-align: center;
+      border-radius: 42px;
+      border: 1px solid rgba(255,255,255,.7);
+      background: rgba(255,255,255,.38);
+      backdrop-filter: blur(16px);
+      box-shadow: var(--shadow);
+      padding: 42px;
+    }
+
+    .logo-orb {
+      width: 112px;
+      height: 112px;
+      display: grid;
+      place-items: center;
+      border-radius: 38px;
+      margin: 0 auto 24px;
+      color: #fff;
+      font-size: 50px;
+      font-weight: 900;
+      background: linear-gradient(135deg, #75d49a, #7fa4ff);
+      border: 6px solid rgba(255,255,255,.82);
+      box-shadow: 0 20px 46px rgba(72, 127, 142, .22);
+      animation: breathe 3.6s ease-in-out infinite;
+    }
+
+    .intro h1 { margin: 0; font-size: clamp(42px, 7vw, 76px); line-height: 1; }
+    .intro p { margin: 18px 0 0; color: #516479; font-size: 18px; }
+    .enter-btn { margin-top: 34px; }
+
+    .btn {
+      min-height: 46px;
+      padding: 0 22px;
+      border-radius: 999px;
+      cursor: pointer;
+      color: #fff;
+      font-weight: 900;
+      background: linear-gradient(135deg, #44b87f, #668bf2);
+      box-shadow: 0 14px 30px rgba(68, 184, 127, .24);
+    }
+    .btn.secondary { color: var(--leaf-dark); background: rgba(255,255,255,.92); border: 1px solid rgba(68, 184, 127, .28); box-shadow: none; }
+
+    .app {
       min-height: 100vh;
       display: grid;
-      grid-template-columns: 300px minmax(0, 1fr);
+      grid-template-columns: 288px minmax(0, 1fr);
+      border-top: 1px solid rgba(255,255,255,.9);
     }
 
     .sidebar {
@@ -50,18 +164,12 @@
       top: 0;
       height: 100vh;
       padding: 28px 22px;
-      background: rgba(255, 255, 255, .62);
+      background: rgba(255,255,255,.58);
       border-right: 1px solid var(--line);
       backdrop-filter: blur(18px);
     }
 
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      margin-bottom: 12px;
-    }
-
+    .brand { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
     .brand-mark {
       width: 42px;
       height: 42px;
@@ -70,497 +178,279 @@
       border-radius: 16px;
       color: #fff;
       font-weight: 900;
-      background: linear-gradient(135deg, #47be8c, #6b8df7);
-      box-shadow: 0 12px 30px rgba(71, 190, 140, .24);
+      background: linear-gradient(135deg, #55bf8a, #7f9dff);
     }
-
     .brand-title { font-size: 22px; font-weight: 900; }
-    .brand-sub { color: var(--muted); font-size: 13px; line-height: 1.7; margin: 0 0 26px; }
-
-    .map-title { font-size: 13px; font-weight: 900; margin: 0 0 12px; color: var(--leaf-dark); }
-    .journey { display: grid; gap: 12px; }
-
-    .node {
+    .brand-sub { color: var(--muted); line-height: 1.7; font-size: 13px; margin: 0 0 24px; }
+    .route-title { color: var(--leaf-dark); font-weight: 900; font-size: 13px; margin: 0 0 12px; }
+    .route { display: grid; gap: 12px; }
+    .route-node {
       display: grid;
-      grid-template-columns: 34px 1fr;
+      grid-template-columns: 32px 1fr;
       gap: 10px;
       align-items: center;
       padding: 12px;
       border-radius: 18px;
-      color: #496071;
-      background: rgba(255, 255, 255, .42);
-      border: 1px solid transparent;
+      background: rgba(255,255,255,.38);
+      color: #536579;
     }
+    .route-node.active { background: rgba(255,255,255,.92); box-shadow: 0 12px 30px rgba(72, 111, 94, .12); color: var(--ink); }
+    .route-node.done .dot { background: #c8f3d9; color: var(--leaf-dark); }
+    .dot { width: 32px; height: 32px; border-radius: 50%; display: grid; place-items: center; background: #edf4f3; font-weight: 900; color: #8392a1; }
+    .route-node.active .dot { background: var(--leaf); color: #fff; }
+    .route-name { font-size: 13px; font-weight: 900; }
+    .route-desc { margin-top: 2px; color: var(--muted); font-size: 11px; line-height: 1.35; }
 
-    .node-dot {
-      width: 34px;
-      height: 34px;
-      border-radius: 999px;
-      display: grid;
-      place-items: center;
-      font-weight: 900;
-      background: #edf3f5;
-      color: #8b98a7;
-    }
+    main { padding: 28px; }
+    .world { max-width: 1180px; margin: 0 auto; display: grid; gap: 20px; }
 
-    .node.active {
-      background: rgba(255, 255, 255, .86);
-      border-color: rgba(79, 175, 122, .24);
-      box-shadow: 0 12px 28px rgba(61, 116, 92, .12);
-      color: var(--ink);
-    }
-
-    .node.active .node-dot { background: var(--leaf); color: #fff; }
-    .node.done .node-dot { background: #c8f3d9; color: var(--leaf-dark); }
-    .node-name { font-size: 14px; font-weight: 900; }
-    .node-desc { margin-top: 2px; font-size: 12px; color: var(--muted); line-height: 1.4; }
-
-    main { padding: 30px; }
-
-    .garden {
-      max-width: 1160px;
-      margin: 0 auto;
-      display: grid;
-      gap: 18px;
-    }
-
-    .hero {
-      min-height: 500px;
+    .map {
       position: relative;
+      min-height: 620px;
       overflow: hidden;
-      border: 1px solid var(--line);
-      border-radius: 30px;
+      border-radius: 40px;
+      border: 1px solid rgba(255,255,255,.72);
       background:
-        radial-gradient(circle at 18% 82%, rgba(255, 214, 201, .9), transparent 22%),
-        radial-gradient(circle at 72% 18%, rgba(255, 243, 191, .88), transparent 22%),
-        linear-gradient(135deg, rgba(255,255,255,.82), rgba(219, 250, 236, .78));
+        radial-gradient(circle at 15% 20%, rgba(255, 242, 173, .64), transparent 24%),
+        radial-gradient(circle at 82% 16%, rgba(238, 231, 255, .8), transparent 25%),
+        linear-gradient(180deg, rgba(232, 251, 255, .9), rgba(246, 255, 239, .84));
       box-shadow: var(--shadow);
     }
-
-    .hero::before {
+    .map::before {
       content: "";
       position: absolute;
-      inset: auto -10% -36% -10%;
-      height: 48%;
+      inset: auto -8% -24% -8%;
+      height: 45%;
       border-radius: 50% 50% 0 0;
-      background: linear-gradient(180deg, #b9edca, #8bd9ab);
+      background: linear-gradient(180deg, #c2f1cc, #92dbad);
     }
-
-    .hero::after {
-      content: "";
+    .path {
       position: absolute;
-      left: 9%;
-      right: 8%;
-      bottom: 18%;
-      height: 54px;
+      left: 12%;
+      right: 12%;
+      top: 46%;
+      height: 96px;
       border-radius: 999px;
-      border: 2px dashed rgba(77, 145, 111, .28);
-      transform: rotate(-4deg);
+      border: 3px dashed rgba(76, 143, 109, .25);
+      transform: rotate(-6deg);
     }
+    .pond { position: absolute; right: 9%; bottom: 10%; width: 180px; height: 80px; border-radius: 50%; background: rgba(136, 205, 237, .38); filter: blur(.2px); }
+    .flower { position: absolute; width: 14px; height: 14px; border-radius: 50%; background: #ffb3c6; box-shadow: 10px 0 #ffd166, 5px 8px #a7f3d0; animation: bob 3.4s ease-in-out infinite; }
+    .flower.f1 { left: 18%; bottom: 17%; } .flower.f2 { left: 45%; bottom: 13%; animation-delay: -1s; } .flower.f3 { right: 19%; bottom: 24%; animation-delay: -2s; }
 
-    .cloud {
+    .map-head { position: relative; z-index: 2; padding: 34px 36px 6px; display: flex; justify-content: space-between; gap: 20px; align-items: flex-start; }
+    .map-title { margin: 0; font-size: 34px; }
+    .map-note { margin: 10px 0 0; color: var(--muted); line-height: 1.7; max-width: 560px; }
+    .voice-pill { display: inline-flex; align-items: center; gap: 8px; padding: 11px 14px; border-radius: 999px; background: rgba(255,255,255,.78); color: var(--leaf-dark); font-weight: 900; border: 1px solid rgba(80, 171, 121, .2); }
+
+    .map-cards { position: relative; z-index: 2; min-height: 520px; }
+    .quest-card {
       position: absolute;
-      width: 116px;
-      height: 42px;
-      border-radius: 999px;
-      background: rgba(255,255,255,.78);
-      filter: blur(.2px);
-    }
-    .cloud.one { left: 8%; top: 54px; }
-    .cloud.two { right: 14%; top: 82px; width: 150px; opacity: .76; }
-
-    .tree {
-      position: absolute;
-      right: 8%;
-      bottom: 92px;
-      width: 270px;
-      height: 320px;
-    }
-
-    .trunk {
-      position: absolute;
-      left: 124px;
-      bottom: 0;
-      width: 34px;
-      height: 150px;
-      border-radius: 22px;
-      background: linear-gradient(180deg, #b98255, #8c5a3e);
-    }
-
-    .leaf {
-      position: absolute;
-      border-radius: 52% 48% 55% 45%;
-      background: linear-gradient(135deg, #7bdc9b, #37a86f);
-      box-shadow: inset -8px -10px 0 rgba(21, 112, 75, .12);
-      transform: scale(var(--grow, .72));
-      transition: transform .45s ease, opacity .45s ease;
-      opacity: var(--opacity, .48);
-    }
-    .leaf.a { width: 130px; height: 112px; left: 72px; top: 48px; }
-    .leaf.b { width: 118px; height: 104px; left: 12px; top: 108px; }
-    .leaf.c { width: 140px; height: 124px; right: 0; top: 106px; }
-    .leaf.d { width: 108px; height: 94px; left: 92px; top: 0; }
-
-    .hero-content {
-      position: relative;
-      z-index: 2;
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) 360px;
-      gap: 24px;
-      padding: 38px;
-    }
-
-    .welcome { max-width: 650px; }
-    .eyebrow { color: var(--leaf-dark); font-weight: 900; font-size: 14px; margin-bottom: 12px; }
-    h1 { margin: 0; font-size: 42px; line-height: 1.1; letter-spacing: 0; }
-    .lead { margin: 18px 0 0; color: #526274; line-height: 1.8; font-size: 16px; max-width: 620px; }
-
-    .soft-tags { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 24px; }
-    .soft-tag {
-      padding: 9px 12px;
-      border-radius: 999px;
-      color: #2f644d;
-      background: rgba(255,255,255,.7);
-      border: 1px solid rgba(79, 175, 122, .22);
-      font-size: 13px;
-      font-weight: 800;
-    }
-
-    .companion-card {
-      align-self: start;
+      width: 260px;
+      min-height: 176px;
+      padding: 18px;
       border-radius: 28px;
-      padding: 20px;
-      background: rgba(255, 255, 255, .82);
-      border: 1px solid rgba(255,255,255,.72);
-      box-shadow: 0 20px 50px rgba(70, 106, 125, .16);
-    }
-
-    .avatar-stage {
-      display: grid;
-      place-items: center;
-      min-height: 190px;
-      border-radius: 24px;
-      background: linear-gradient(180deg, #fff, #eefdf6);
-      border: 1px solid rgba(79, 175, 122, .18);
-      margin-bottom: 16px;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .avatar-stage::after {
-      content: "";
-      position: absolute;
-      left: 24px;
-      right: 24px;
-      bottom: 24px;
-      height: 22px;
-      border-radius: 50%;
-      background: rgba(72, 132, 100, .13);
-    }
-
-    .avatar-preview {
-      width: 120px;
-      height: 120px;
-      border-radius: 999px;
-      display: grid;
-      place-items: center;
-      overflow: hidden;
-      color: #fff;
-      font-size: 42px;
-      font-weight: 900;
-      background: linear-gradient(135deg, #74d99b, #88a7ff);
-      border: 5px solid #fff;
-      box-shadow: 0 18px 34px rgba(67, 115, 120, .18);
-      z-index: 1;
-    }
-
-    .avatar-preview img { width: 100%; height: 100%; object-fit: cover; }
-    .card-title { font-size: 18px; font-weight: 900; margin: 0 0 4px; }
-    .card-note { color: var(--muted); font-size: 13px; line-height: 1.6; margin: 0 0 14px; }
-
-    .field { display: grid; gap: 8px; margin: 12px 0; }
-    label { font-size: 13px; font-weight: 900; color: #34495e; }
-
-    input[type="text"], textarea {
-      width: 100%;
-      border: 1px solid rgba(91, 122, 145, .22);
-      border-radius: 16px;
-      padding: 12px 14px;
-      outline: none;
-      color: var(--ink);
-      background: rgba(255,255,255,.94);
-    }
-
-    textarea { min-height: 110px; resize: vertical; line-height: 1.65; }
-    input:focus, textarea:focus { border-color: #69c58f; box-shadow: 0 0 0 4px rgba(105, 197, 143, .15); }
-
-    .file-label {
-      display: inline-flex;
-      justify-content: center;
-      align-items: center;
-      gap: 8px;
-      width: 100%;
-      border: 1px dashed rgba(68, 137, 100, .42);
-      border-radius: 16px;
-      padding: 12px 14px;
+      background: var(--card);
+      border: 1px solid rgba(255,255,255,.78);
+      box-shadow: 0 18px 46px rgba(54, 83, 112, .13);
       cursor: pointer;
-      color: var(--leaf-dark);
-      background: rgba(240, 255, 247, .8);
-      font-weight: 900;
+      transition: transform .2s ease, box-shadow .2s ease, opacity .2s ease;
     }
-    input[type="file"] { display: none; }
-
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      min-height: 44px;
-      padding: 0 18px;
-      border-radius: 999px;
-      cursor: pointer;
-      font-weight: 900;
-      color: #fff;
-      background: linear-gradient(135deg, #41b77b, #5b85f2);
-      box-shadow: 0 12px 26px rgba(65, 183, 123, .24);
-    }
-
-    .btn.secondary { color: var(--leaf-dark); background: #fff; border: 1px solid rgba(65, 183, 123, .26); box-shadow: none; }
-    .btn-row { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 16px; }
+    .quest-card:hover { transform: translateY(-5px); box-shadow: 0 24px 58px rgba(54,83,112,.18); }
+    .quest-card.active { outline: 3px solid rgba(78, 175, 122, .28); }
+    .quest-card.locked { opacity: .55; cursor: default; }
+    .quest-card.locked:hover { transform: none; }
+    .quest-card.q1 { left: 7%; top: 100px; }
+    .quest-card.q2 { left: 33%; top: 235px; }
+    .quest-card.q3 { right: 15%; top: 145px; }
+    .quest-card.q4 { right: 8%; bottom: 38px; }
+    .quest-kicker { color: var(--leaf-dark); font-size: 12px; font-weight: 900; margin-bottom: 6px; }
+    .quest-name { font-size: 20px; font-weight: 900; margin-bottom: 8px; }
+    .quest-text { color: var(--muted); line-height: 1.55; font-size: 13px; }
+    .quest-icon { width: 44px; height: 44px; display: grid; place-items: center; border-radius: 16px; margin-bottom: 12px; background: linear-gradient(135deg, #dcfce7, #e0e7ff); color: var(--leaf-dark); font-weight: 900; }
 
     .panel {
-      border-radius: var(--radius);
+      border-radius: 28px;
       padding: 24px;
-      background: var(--paper);
-      border: 1px solid rgba(255,255,255,.72);
+      background: var(--glass);
+      border: 1px solid rgba(255,255,255,.76);
       box-shadow: var(--shadow);
-      backdrop-filter: blur(14px);
+      backdrop-filter: blur(16px);
     }
-
-    .panel-title { margin: 0 0 6px; font-size: 24px; }
+    .panel-title { margin: 0 0 6px; font-size: 25px; }
     .panel-note { margin: 0 0 18px; color: var(--muted); line-height: 1.7; }
-
-    .split { display: grid; grid-template-columns: minmax(0, 1fr) 360px; gap: 18px; }
-
-    .chips { display: flex; flex-wrap: wrap; gap: 10px; }
-    .chip {
-      border: 1px solid rgba(77, 145, 111, .28);
-      background: rgba(255,255,255,.78);
-      color: #315b47;
-      border-radius: 999px;
-      padding: 10px 14px;
-      cursor: pointer;
-      font-weight: 900;
-      font-size: 14px;
-    }
-    .chip.selected { background: #4faf7a; color: #fff; border-color: #4faf7a; }
-
-    .chat {
-      display: grid;
-      gap: 14px;
-    }
-
-    .bubble-row { display: grid; grid-template-columns: 48px 1fr; gap: 12px; align-items: start; }
-    .bubble-avatar {
-      width: 48px;
-      height: 48px;
-      border-radius: 999px;
-      overflow: hidden;
-      display: grid;
-      place-items: center;
-      color: #fff;
-      font-weight: 900;
-      background: linear-gradient(135deg, #74d99b, #88a7ff);
-      border: 3px solid #fff;
-    }
-    .bubble-avatar img { width: 100%; height: 100%; object-fit: cover; }
-    .bubble {
-      padding: 14px 16px;
-      border-radius: 20px;
-      background: #fff;
-      border: 1px solid rgba(91, 122, 145, .14);
-      line-height: 1.7;
-      color: #405064;
-    }
-    .bubble strong { color: var(--leaf-dark); }
-
-    .progress-card { display: grid; gap: 12px; }
-    .growth {
-      min-height: 220px;
-      border-radius: 22px;
-      position: relative;
-      overflow: hidden;
-      background: linear-gradient(180deg, #e9fcff 0%, #f8fff1 58%, #bdecc6 100%);
-      border: 1px solid rgba(91, 122, 145, .12);
-    }
-    .sprout {
-      position: absolute;
-      left: 50%;
-      bottom: 44px;
-      width: 8px;
-      height: calc(34px + var(--stage) * 24px);
-      border-radius: 999px;
-      background: #3fa66d;
-      transform: translateX(-50%);
-      transition: height .35s ease;
-    }
-    .sprout::before, .sprout::after {
-      content: "";
-      position: absolute;
-      width: calc(32px + var(--stage) * 12px);
-      height: calc(24px + var(--stage) * 7px);
-      top: 16px;
-      background: #69c98e;
-      border-radius: 70% 30% 70% 30%;
-      opacity: calc(.46 + var(--stage) * .1);
-    }
-    .sprout::before { right: 2px; transform: rotate(-24deg); }
-    .sprout::after { left: 2px; transform: rotate(204deg); }
-    .ground { position: absolute; left: 0; right: 0; bottom: 0; height: 54px; background: #9eddad; border-radius: 50% 50% 0 0; }
-
-    .status-list { display: grid; gap: 8px; margin: 0; padding: 0; list-style: none; }
-    .status-list li { padding: 11px 12px; border-radius: 16px; background: rgba(255,255,255,.74); border: 1px solid rgba(91, 122, 145, .12); line-height: 1.55; }
-
-    .result {
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) minmax(300px, .72fr);
-      gap: 18px;
-    }
-    .resume-paper {
-      background: #fff;
-      border: 1px solid #c9cdd6;
-      border-radius: 6px;
-      padding: 26px 32px;
-      min-height: 360px;
-      box-shadow: 0 14px 32px rgba(38, 52, 71, .12);
-    }
-    .resume-paper h3 { margin: 0 0 10px; padding-bottom: 8px; border-bottom: 1px solid #263447; font-size: 16px; }
-    .resume-paper h4 { margin: 12px 0 8px; font-size: 15px; }
-    .resume-paper li { margin-bottom: 8px; line-height: 1.6; }
-
     .hidden { display: none !important; }
 
-    @media (max-width: 980px) {
-      .page { grid-template-columns: 1fr; }
-      .sidebar { position: static; height: auto; }
-      .journey { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-      .hero-content, .split, .result { grid-template-columns: 1fr; }
-      .tree { opacity: .35; right: -8%; }
-    }
+    .companion-grid, .work-grid, .result-grid { display: grid; grid-template-columns: minmax(0, 1fr) 360px; gap: 18px; }
+    .avatar-stage { min-height: 220px; display: grid; place-items: center; border-radius: 26px; background: linear-gradient(180deg, #fff, #effdf6); border: 1px solid rgba(78,175,122,.2); position: relative; overflow: hidden; }
+    .avatar-stage::after { content: ""; position: absolute; left: 38px; right: 38px; bottom: 42px; height: 24px; border-radius: 50%; background: rgba(69, 120, 91, .14); }
+    .avatar { width: 126px; height: 126px; border-radius: 50%; overflow: hidden; display: grid; place-items: center; z-index: 1; background: linear-gradient(135deg, #77d39a, #85a2ff); border: 6px solid #fff; color: #fff; font-size: 48px; font-weight: 900; animation: breathe 3.6s ease-in-out infinite; }
+    .avatar img, .bubble-avatar img { width: 100%; height: 100%; object-fit: cover; }
+    .field { display: grid; gap: 8px; margin: 14px 0; }
+    label { font-size: 13px; font-weight: 900; color: #34495e; }
+    input[type="text"], textarea { width: 100%; border: 1px solid rgba(91,122,145,.2); border-radius: 18px; padding: 13px 14px; background: rgba(255,255,255,.92); outline: none; color: var(--ink); }
+    textarea { min-height: 120px; resize: vertical; line-height: 1.65; }
+    input:focus, textarea:focus { border-color: #69c58f; box-shadow: 0 0 0 4px rgba(105, 197, 143, .15); }
+    .file-label { display: inline-flex; justify-content: center; align-items: center; width: 100%; border-radius: 18px; padding: 13px 14px; border: 1px dashed rgba(68,137,100,.42); background: rgba(240,255,247,.84); color: var(--leaf-dark); font-weight: 900; cursor: pointer; }
+    input[type="file"] { display: none; }
+    .btn-row { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 16px; }
+    .chips { display: flex; gap: 10px; flex-wrap: wrap; }
+    .chip { border: 1px solid rgba(77,145,111,.25); background: rgba(255,255,255,.8); color: #315b47; border-radius: 999px; padding: 10px 14px; cursor: pointer; font-weight: 900; font-size: 14px; }
+    .chip.selected { background: var(--leaf); color: #fff; border-color: var(--leaf); }
 
-    @media (max-width: 600px) {
+    .chat-row { display: grid; grid-template-columns: 50px 1fr; gap: 12px; align-items: start; }
+    .bubble-avatar { width: 50px; height: 50px; border-radius: 50%; display: grid; place-items: center; overflow: hidden; background: linear-gradient(135deg, #77d39a, #85a2ff); border: 3px solid #fff; color: #fff; font-weight: 900; }
+    .bubble { padding: 15px 17px; border-radius: 22px; background: #fff; border: 1px solid rgba(91,122,145,.12); color: #405064; line-height: 1.7; }
+    .bubble strong { color: var(--leaf-dark); }
+    .status-list { display: grid; gap: 8px; margin: 0; padding: 0; list-style: none; }
+    .status-list li { padding: 11px 12px; border-radius: 16px; background: rgba(255,255,255,.76); border: 1px solid rgba(91,122,145,.12); line-height: 1.55; }
+    .resume-paper { background: #fff; border: 1px solid #c9cdd6; border-radius: 6px; padding: 26px 32px; min-height: 350px; box-shadow: 0 14px 32px rgba(38,52,71,.12); }
+    .resume-paper h3 { margin: 0 0 10px; padding-bottom: 8px; border-bottom: 1px solid #263447; font-size: 16px; }
+    .resume-paper li { margin-bottom: 8px; line-height: 1.6; }
+
+    @keyframes drift { from { transform: translateX(0); } to { transform: translateX(120vw); } }
+    @keyframes flutter { 0%,100% { transform: translate(0,0) rotate(25deg); } 35% { transform: translate(70px,-44px) rotate(4deg); } 70% { transform: translate(140px,18px) rotate(35deg); } }
+    @keyframes breathe { 0%,100% { transform: translateY(0) scale(1); } 50% { transform: translateY(-7px) scale(1.025); } }
+    @keyframes pulse { 0%,100% { transform: scale(1); opacity: .86; } 50% { transform: scale(1.08); opacity: .68; } }
+    @keyframes bob { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-7px); } }
+
+    @media (max-width: 980px) {
+      .app { grid-template-columns: 1fr; }
+      .sidebar { position: static; height: auto; }
+      .route { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .companion-grid, .work-grid, .result-grid { grid-template-columns: 1fr; }
+      .map { min-height: 860px; }
+      .quest-card { position: relative; left: auto !important; right: auto !important; top: auto !important; bottom: auto !important; width: auto; margin: 14px 22px; }
+      .map-cards { display: grid; padding-top: 12px; }
+      .path, .pond { display: none; }
+    }
+    @media (max-width: 620px) {
+      .intro { padding: 14px; }
+      .intro-card { padding: 28px 20px; }
       main { padding: 14px; }
-      .hero-content { padding: 22px; }
-      h1 { font-size: 31px; }
-      .journey { grid-template-columns: 1fr; }
+      .map-head { display: block; padding: 26px 22px 0; }
+      .route { grid-template-columns: 1fr; }
     }
   </style>
 </head>
 <body>
-  <div class="page">
-    <aside class="sidebar">
-      <div class="brand">
-        <div class="brand-mark">灵</div>
-        <div>
-          <div class="brand-title">灵秀花园</div>
-        </div>
+  <section class="intro" id="intro">
+    <div class="sun"></div>
+    <div class="cloud one"></div>
+    <div class="cloud two"></div>
+    <div class="butterfly a"></div>
+    <div class="butterfly b"></div>
+    <div class="intro-card">
+      <div>
+        <div class="logo-orb">灵</div>
+        <h1>灵秀花园</h1>
+        <p>欢迎回来。今天，我们去花园里找一颗经历种子。</p>
+        <button class="btn enter-btn" id="enterBtn">进入花园</button>
       </div>
-      <p class="brand-sub">一个给低经历学生的轻松对话空间。先不急着写简历，我们一起把能写的经历慢慢养出来。</p>
-      <p class="map-title">今天的小路</p>
-      <div class="journey" id="journey"></div>
+    </div>
+  </section>
+
+  <section class="app" id="app">
+    <aside class="sidebar">
+      <div class="brand"><div class="brand-mark">灵</div><div class="brand-title">灵秀花园</div></div>
+      <p class="brand-sub">不是写简历的任务板，而是一条慢慢回想的小路。前台是花园旅程，后台是经历盘点、价值评估和简历转译。</p>
+      <p class="route-title">今日路线</p>
+      <div class="route" id="route"></div>
     </aside>
 
     <main>
-      <div class="garden">
-        <section class="hero" id="hero">
-          <div class="cloud one"></div>
-          <div class="cloud two"></div>
-          <div class="tree" id="heroTree">
-            <div class="leaf a"></div>
-            <div class="leaf b"></div>
-            <div class="leaf c"></div>
-            <div class="leaf d"></div>
-            <div class="trunk"></div>
+      <div class="world">
+        <section class="map" id="map">
+          <div class="path"></div>
+          <div class="pond"></div>
+          <div class="flower f1"></div>
+          <div class="flower f2"></div>
+          <div class="flower f3"></div>
+          <div class="map-head">
+            <div>
+              <h2 class="map-title">今天的小路</h2>
+              <p class="map-note">沿着四个花园单元往前走。每走完一步，就离一张可以放进简历的经历卡更近一点。</p>
+            </div>
+            <div class="voice-pill">语音对话入口 · v0.1 占位</div>
           </div>
-
-          <div class="hero-content">
-            <div class="welcome">
-              <div class="eyebrow">欢迎来到灵秀花园</div>
-              <h1>你不是没有经历，只是还没在一个安心的地方把它说出来。</h1>
-              <p class="lead">这里不用一上来就会写简历。选一个你愿意聊天的形象，我们沿着小路慢慢回想：你做过什么、帮过谁、留下了什么。最后，把它摘成一张可以放进简历的经历卡。</p>
-              <div class="soft-tags">
-                <span class="soft-tag">低压力聊天</span>
-                <span class="soft-tag">每次只问一个小问题</span>
-                <span class="soft-tag">只拔高表达，不虚构事实</span>
-              </div>
-            </div>
-
-            <div class="companion-card">
-              <div class="avatar-stage">
-                <div class="avatar-preview" id="avatarPreview">灵</div>
-              </div>
-              <h2 class="card-title">创建今天陪你聊天的人</h2>
-              <p class="card-note">可以上传一个让你安心的头像。它会陪你走完整段经历整理旅程。</p>
-              <label class="file-label" for="avatarInput">上传一个想聊天的形象</label>
-              <input id="avatarInput" type="file" accept="image/*" />
-              <div class="field">
-                <label for="nicknameInput">我该怎么称呼你？</label>
-                <input id="nicknameInput" type="text" placeholder="比如：思思、Sijie、同学" />
-              </div>
-              <div class="btn-row">
-                <button class="btn" id="startBtn">开始轻轻聊一下</button>
-              </div>
-            </div>
+          <div class="map-cards">
+            <article class="quest-card q1 active" data-open="companionPanel">
+              <div class="quest-icon">知</div>
+              <div class="quest-kicker">第一处</div>
+              <div class="quest-name">莫愁前路无知己</div>
+              <div class="quest-text">上传一个愿意陪你聊天的形象，让它陪你走完整段小路。</div>
+            </article>
+            <article class="quest-card q2 locked" data-open="seedPanel">
+              <div class="quest-icon">采</div>
+              <div class="quest-kicker">第二处</div>
+              <div class="quest-name">愿君多采撷</div>
+              <div class="quest-text">从普通小事里采集经历种子，先找一件最值得继续聊的事。</div>
+            </article>
+            <article class="quest-card q3 locked" data-open="memoryPanel">
+              <div class="quest-icon">忆</div>
+              <div class="quest-kicker">第三处</div>
+              <div class="quest-name">追忆似水年华</div>
+              <div class="quest-text">通过一个轻轻的问题，补出动作、结果、数量或使用对象。</div>
+            </article>
+            <article class="quest-card q4 locked" data-open="resultPanel">
+              <div class="quest-icon">笺</div>
+              <div class="quest-kicker">第四处</div>
+              <div class="quest-name">不知转入此中来</div>
+              <div class="quest-text">不知不觉走到这里，摘下一张可以使用的简历经历卡。</div>
+            </article>
           </div>
         </section>
 
-        <section class="split hidden" id="chatSection">
-          <div class="panel">
-            <h2 class="panel-title">花园里的第一段对话</h2>
-            <p class="panel-note">不用正式回答，想到什么说什么。这里不是面试，只是一起找一颗可以发芽的经历种子。</p>
-            <div class="chat">
-              <div class="bubble-row">
-                <div class="bubble-avatar" id="chatAvatar">灵</div>
-                <div class="bubble" id="guideBubble"><strong>灵秀：</strong>我们先从很小的一件事开始。最近有没有一件你帮别人做过、参与过、整理过的小事？</div>
-              </div>
-            </div>
-
+        <section class="panel companion-grid" id="companionPanel">
+          <div>
+            <h2 class="panel-title">莫愁前路无知己</h2>
+            <p class="panel-note">先选一个让你愿意开口的形象。它不需要很专业，只需要让你觉得可以慢慢聊。</p>
+            <label class="file-label" for="avatarInput">上传一个想聊天的形象</label>
+            <input id="avatarInput" type="file" accept="image/*" />
             <div class="field">
-              <label>你以后可能想往哪个方向投？不确定也可以跳过。</label>
+              <label for="nicknameInput">我该怎么称呼你？</label>
+              <input id="nicknameInput" type="text" placeholder="比如：思思、Sijie、同学" />
+            </div>
+            <div class="btn-row"><button class="btn" id="startBtn">去下一处花园</button></div>
+          </div>
+          <div class="avatar-stage"><div class="avatar" id="avatarPreview">灵</div></div>
+        </section>
+
+        <section class="panel work-grid hidden" id="seedPanel">
+          <div>
+            <h2 class="panel-title">愿君多采撷</h2>
+            <p class="panel-note">想不起大项目也没关系。先点几个线索，再随便说一句做过的小事。</p>
+            <div class="field">
+              <label>以后可能想投的方向</label>
               <div class="chips" id="roleChips"></div>
             </div>
-
             <div class="field">
-              <label>如果想不起来，可以先点几个线索</label>
+              <label>可以先采几颗种子</label>
               <div class="chips" id="seedChips"></div>
             </div>
-
             <div class="field">
               <label for="experienceInput">随便说一句这件事</label>
               <textarea id="experienceInput" placeholder="比如：我帮老师整理过学生名单和一些表格，后来老师拿去做统计。"></textarea>
             </div>
             <div class="btn-row">
-              <button class="btn" id="evaluateBtn">看看这颗种子能不能发芽</button>
+              <button class="btn" id="evaluateBtn">带着它去回忆</button>
               <button class="btn secondary" id="exampleBtn">填入一个示例</button>
             </div>
           </div>
-
-          <div class="panel progress-card">
-            <h2 class="panel-title">小树正在长</h2>
-            <p class="panel-note">每补充一个关键事实，经历就会更清楚一点。</p>
-            <div class="growth" id="growthBox">
-              <div class="sprout" id="sprout"></div>
-              <div class="ground"></div>
+          <div>
+            <div class="chat-row">
+              <div class="bubble-avatar" id="chatAvatar">灵</div>
+              <div class="bubble" id="guideBubble"><strong>灵秀：</strong>不用讲得很厉害。你只要说一件真实发生过的小事，我来陪你看看它有没有可写的地方。</div>
             </div>
-            <ul class="status-list" id="stateList"></ul>
+            <ul class="status-list" id="stateList" style="margin-top:14px;"></ul>
           </div>
         </section>
 
-        <section class="panel hidden" id="evaluationSection">
-          <h2 class="panel-title">它已经有一点轮廓了</h2>
-          <p class="panel-note">灵秀会先判断这段经历能不能写、还缺哪一个关键事实。前台说得轻，后台做的是价值评估。</p>
+        <section class="panel hidden" id="memoryPanel">
+          <h2 class="panel-title">追忆似水年华</h2>
+          <p class="panel-note">这里是追问补全。前台是轻轻回忆，后台是在补事实缺口。</p>
           <ul class="status-list" id="evaluationList"></ul>
-          <div class="bubble-row" style="margin-top: 16px;">
+          <div class="chat-row" style="margin-top:16px;">
             <div class="bubble-avatar" id="questionAvatar">灵</div>
             <div class="bubble" id="nextQuestion"></div>
           </div>
@@ -568,15 +458,13 @@
             <label for="followupInput">补一点点就好</label>
             <input id="followupInput" type="text" placeholder="比如：大概 80 份，老师拿去做期末统计" />
           </div>
-          <div class="btn-row">
-            <button class="btn" id="generateBtn">摘下一张经历卡</button>
-          </div>
+          <div class="btn-row"><button class="btn" id="generateBtn">走到最后一处</button></div>
         </section>
 
-        <section class="result hidden" id="resultSection">
+        <section class="result-grid hidden" id="resultPanel">
           <div class="panel">
-            <h2 class="panel-title">你的经历卡成熟了</h2>
-            <p class="panel-note">这不是编出来的简历，而是从你说过的事实里整理出来的表达。</p>
+            <h2 class="panel-title">不知转入此中来</h2>
+            <p class="panel-note">不知不觉，你已经走到这里了。这张经历卡来自你说过的事实。</p>
             <div class="resume-paper">
               <h3 id="resumeSection">校园/项目经历</h3>
               <h4 id="resumeTitle">经历整理与支持</h4>
@@ -586,14 +474,12 @@
           <div class="panel">
             <h2 class="panel-title">花园记录</h2>
             <ul class="status-list" id="reportList"></ul>
-            <div class="btn-row">
-              <button class="btn secondary" id="restartBtn">重新走一遍小路</button>
-            </div>
+            <div class="btn-row"><button class="btn secondary" id="restartBtn">重新走一遍</button></div>
           </div>
         </section>
       </div>
     </main>
-  </div>
+  </section>
 
   <script>
     const roles = [
@@ -604,7 +490,6 @@
       { id: 'edu', label: '教育/教务/培训', focus: '学生沟通和课程支持' },
       { id: 'finance', label: '金融/财务/数据助理', focus: '数据准确性和资料核对' }
     ];
-
     const seeds = [
       { id: 'teacher', label: '帮老师做过事', weight: 52 },
       { id: 'course', label: '课程小组项目', weight: 76 },
@@ -614,143 +499,99 @@
       { id: 'volunteer', label: '志愿活动', weight: 60 },
       { id: 'project', label: '自己做的小作品', weight: 64 }
     ];
-
-    const journey = [
-      ['入口', '选一个愿意聊天的形象'],
-      ['种子', '找到一件普通小事'],
-      ['发芽', '补一个关键事实'],
-      ['经历卡', '转成简历表达']
+    const route = [
+      ['莫愁前路无知己', '上传陪聊形象'],
+      ['愿君多采撷', '采集经历种子'],
+      ['追忆似水年华', '补关键事实'],
+      ['不知转入此中来', '摘下经历卡']
     ];
-
-    const state = {
-      step: 1,
-      name: '',
-      avatar: '',
-      role: roles[0],
-      selectedSeeds: [],
-      evaluation: null
-    };
-
+    const state = { step: 1, name: '', avatar: '', role: roles[0], selectedSeeds: [], evaluation: null };
     const $ = (id) => document.getElementById(id);
 
-    function renderJourney() {
-      $('journey').innerHTML = journey.map((item, index) => {
+    function renderRoute() {
+      $('route').innerHTML = route.map((item, index) => {
         const num = index + 1;
         const klass = num === state.step ? 'active' : num < state.step ? 'done' : '';
-        return `<div class="node ${klass}"><div class="node-dot">${num < state.step ? '✓' : num}</div><div><div class="node-name">${item[0]}</div><div class="node-desc">${item[1]}</div></div></div>`;
+        return `<div class="route-node ${klass}"><div class="dot">${num < state.step ? '✓' : num}</div><div><div class="route-name">${item[0]}</div><div class="route-desc">${item[1]}</div></div></div>`;
       }).join('');
-      document.documentElement.style.setProperty('--stage', Math.max(0, state.step - 1));
-      document.querySelectorAll('.leaf').forEach((leaf, index) => {
-        leaf.style.setProperty('--grow', state.step > index ? '1' : '.72');
-        leaf.style.setProperty('--opacity', state.step > index ? '.92' : '.46');
+      document.querySelectorAll('.quest-card').forEach((card, index) => {
+        card.classList.toggle('active', index + 1 === state.step);
+        card.classList.toggle('locked', index + 1 > state.step);
       });
     }
-
+    function setStep(step, panel) {
+      state.step = step;
+      renderRoute();
+      if (panel) setTimeout(() => panel.scrollIntoView({ behavior: 'smooth', block: 'start' }), 80);
+    }
     function renderAvatar(target) {
-      if (state.avatar) {
-        target.innerHTML = `<img src="${state.avatar}" alt="聊天头像" />`;
-      } else {
-        target.textContent = '灵';
-      }
+      if (state.avatar) target.innerHTML = `<img src="${state.avatar}" alt="聊天头像" />`;
+      else target.textContent = '灵';
     }
-
-    function syncAvatars() {
-      ['avatarPreview', 'chatAvatar', 'questionAvatar'].forEach((id) => renderAvatar($(id)));
-    }
-
+    function syncAvatars() { ['avatarPreview','chatAvatar','questionAvatar'].forEach(id => renderAvatar($(id))); }
     function renderRoleChips() {
-      $('roleChips').innerHTML = roles.map((role) => `<button class="chip ${state.role.id === role.id ? 'selected' : ''}" data-role="${role.id}">${role.label}</button>`).join('');
-      document.querySelectorAll('[data-role]').forEach((btn) => {
-        btn.onclick = () => {
-          state.role = roles.find((role) => role.id === btn.dataset.role);
-          renderRoleChips();
-          renderState();
-        };
-      });
+      $('roleChips').innerHTML = roles.map(role => `<button class="chip ${state.role.id === role.id ? 'selected' : ''}" data-role="${role.id}">${role.label}</button>`).join('');
+      document.querySelectorAll('[data-role]').forEach(btn => btn.onclick = () => { state.role = roles.find(role => role.id === btn.dataset.role); renderRoleChips(); renderState(); });
     }
-
     function renderSeedChips() {
-      $('seedChips').innerHTML = seeds.map((seed) => `<button class="chip ${state.selectedSeeds.includes(seed.id) ? 'selected' : ''}" data-seed="${seed.id}">${seed.label}</button>`).join('');
-      document.querySelectorAll('[data-seed]').forEach((btn) => {
-        btn.onclick = () => {
-          const id = btn.dataset.seed;
-          if (state.selectedSeeds.includes(id)) state.selectedSeeds = state.selectedSeeds.filter((item) => item !== id);
-          else if (state.selectedSeeds.length < 3) state.selectedSeeds.push(id);
-          renderSeedChips();
-          renderState();
-          if (!$('experienceInput').value.trim()) {
-            const selected = seeds.find((seed) => seed.id === id);
-            $('experienceInput').placeholder = `比如：我做过${selected.label}，当时主要是...`;
-          }
-        };
+      $('seedChips').innerHTML = seeds.map(seed => `<button class="chip ${state.selectedSeeds.includes(seed.id) ? 'selected' : ''}" data-seed="${seed.id}">${seed.label}</button>`).join('');
+      document.querySelectorAll('[data-seed]').forEach(btn => btn.onclick = () => {
+        const id = btn.dataset.seed;
+        if (state.selectedSeeds.includes(id)) state.selectedSeeds = state.selectedSeeds.filter(item => item !== id);
+        else if (state.selectedSeeds.length < 3) state.selectedSeeds.push(id);
+        renderSeedChips(); renderState();
       });
     }
-
     function renderState() {
-      const selected = state.selectedSeeds.map((id) => seeds.find((seed) => seed.id === id)?.label).filter(Boolean);
+      const selected = state.selectedSeeds.map(id => seeds.find(seed => seed.id === id)?.label).filter(Boolean);
       $('stateList').innerHTML = [
         `今天称呼：${state.name || '还没告诉灵秀'}`,
         `可能方向：${state.role.label}`,
-        `经历线索：${selected.length ? selected.join('、') : '还在找种子'}`,
+        `采到的种子：${selected.length ? selected.join('、') : '还没有采到'}`,
         '花园规则：只拔高表达，不拔高事实'
-      ].map((item) => `<li>${item}</li>`).join('');
+      ].map(item => `<li>${item}</li>`).join('');
+    }
+    function includesAny(text, words) { return words.some(word => text.includes(word)); }
+    function unlock(panelId, step) {
+      $(panelId).classList.remove('hidden');
+      setStep(step, $(panelId));
     }
 
-    function setStep(step, target) {
-      state.step = step;
-      renderJourney();
-      if (target) setTimeout(() => target.scrollIntoView({ behavior: 'smooth', block: 'start' }), 80);
-    }
-
-    function startChat() {
+    $('enterBtn').onclick = () => $('app').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    $('avatarInput').onchange = event => {
+      const file = event.target.files && event.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = () => { state.avatar = reader.result; syncAvatars(); };
+      reader.readAsDataURL(file);
+    };
+    $('startBtn').onclick = () => {
       state.name = $('nicknameInput').value.trim() || '同学';
-      syncAvatars();
-      $('guideBubble').innerHTML = `<strong>${state.name}，我们先不急着写简历。</strong><br />你可以把这里当成一个小花园。先随便说一件做过的小事，我来陪你看看它能不能长成一张经历卡。`;
-      $('chatSection').classList.remove('hidden');
-      renderState();
-      setStep(2, $('chatSection'));
-    }
-
-    function includesAny(text, words) {
-      return words.some((word) => text.includes(word));
-    }
-
-    function evaluate() {
+      $('guideBubble').innerHTML = `<strong>${state.name}，我们先不急着写简历。</strong><br />今天只做一件小事：采一颗经历种子。想到什么说什么，我陪你慢慢看。`;
+      renderState(); unlock('seedPanel', 2);
+    };
+    $('exampleBtn').onclick = () => {
+      state.role = roles[2]; state.selectedSeeds = ['teacher','content'];
+      $('experienceInput').value = '我帮老师整理过学生名单和一些表格，后来老师拿去做统计。';
+      renderRoleChips(); renderSeedChips(); renderState();
+    };
+    $('evaluateBtn').onclick = () => {
       const text = $('experienceInput').value.trim();
-      if (!text) {
-        $('experienceInput').focus();
-        return;
-      }
-      const seedScore = state.selectedSeeds
-        .map((id) => seeds.find((seed) => seed.id === id)?.weight || 0)
-        .sort((a, b) => b - a)[0] || 48;
-      const hasAction = includesAny(text, ['整理', '核对', '记录', '对接', '通知', '发布', '收集', '分类', '维护', '协助', '参与', '完成', '跟进', '写', '做', '帮']);
-      const hasResult = includesAny(text, ['后来', '用于', '支持', '帮助', '完成', '统计', '发布', '交付', '报名', '展示', '汇报', '拿去']);
+      if (!text) { $('experienceInput').focus(); return; }
+      const seedScore = state.selectedSeeds.map(id => seeds.find(seed => seed.id === id)?.weight || 0).sort((a,b) => b-a)[0] || 48;
+      const hasAction = includesAny(text, ['整理','核对','记录','对接','通知','发布','收集','分类','维护','协助','参与','完成','跟进','写','做','帮']);
+      const hasResult = includesAny(text, ['后来','用于','支持','帮助','完成','统计','发布','交付','报名','展示','汇报','拿去']);
       const hasNumber = /\d|一|二|三|四|五|六|七|八|九|十|百|千|万|多|几/.test(text);
       const score = Math.min(92, seedScore + (hasAction ? 10 : 0) + (hasResult ? 10 : 0) + (hasNumber ? 8 : 0) + (state.role.id !== 'general' ? 4 : 0));
       const level = score >= 80 ? '可以作为主经历继续深挖' : score >= 62 ? '可以写，但还需要补实一点' : '适合作为辅助经历或继续寻找更强线索';
       const missing = !hasAction ? '具体动作' : !hasResult ? '结果用途' : !hasNumber ? '数量规模' : '表达重点';
-      const question = missing === '具体动作'
-        ? '你当时具体动手做的第一步是什么？很小的一步也可以。'
-        : missing === '结果用途'
-          ? '你做完之后，这个东西后来给谁用了，或者帮别人省了哪一步？'
-          : missing === '数量规模'
-            ? '这件事大概涉及多少人、多少份资料、几次活动，或者持续了多久？大概数也可以。'
-            : `如果按${state.role.focus}来写，你觉得这件事里最能说明你的细节是哪一个？`;
-      state.evaluation = { text, score, level, missing, question, hasNumber, hasResult };
-
-      $('evaluationList').innerHTML = [
-        `这颗种子的可写性：${score} 分`,
-        `当前判断：${level}`,
-        `它已经有的东西：真实场景、用户动作、可被转译的经历线索`,
-        `还差的一点：${missing}`
-      ].map((item) => `<li>${item}</li>`).join('');
-      $('nextQuestion').innerHTML = `<strong>我再轻轻问一个问题：</strong><br />${question}`;
-      $('evaluationSection').classList.remove('hidden');
-      setStep(3, $('evaluationSection'));
-    }
-
-    function generate() {
+      const question = missing === '具体动作' ? '你当时具体动手做的第一步是什么？很小的一步也可以。' : missing === '结果用途' ? '你做完之后，这个东西后来给谁用了，或者帮别人省了哪一步？' : missing === '数量规模' ? '这件事大概涉及多少人、多少份资料、几次活动，或者持续了多久？大概数也可以。' : `如果按${state.role.focus}来写，你觉得这件事里最能说明你的细节是哪一个？`;
+      state.evaluation = { text, score, level, missing, question };
+      $('evaluationList').innerHTML = [`这颗种子的可写性：${score} 分`, `当前判断：${level}`, '它已经有的东西：真实场景、用户动作、可被转译的经历线索', `还差的一点：${missing}`].map(item => `<li>${item}</li>`).join('');
+      $('nextQuestion').innerHTML = `<strong>我再陪你回忆一点点：</strong><br />${question}`;
+      unlock('memoryPanel', 3);
+    };
+    $('generateBtn').onclick = () => {
       if (!state.evaluation) return;
       const text = state.evaluation.text;
       const follow = $('followupInput').value.trim();
@@ -758,78 +599,20 @@
       const object = text.includes('表格') ? '表格信息' : text.includes('名单') ? '名单资料' : text.includes('活动') ? '活动信息' : text.includes('内容') ? '内容素材' : '相关资料';
       const prefix = state.evaluation.score >= 80 ? '参与' : '协助';
       const suffix = follow ? `，${follow.replace(/[。.!！]$/g, '')}` : `，支持${state.role.focus}`;
-      const bullet1 = `${prefix}${action}${object}${suffix}`;
-      const bullet2 = `围绕${state.role.focus}完成基础信息整理与执行支持，沉淀细致核对、沟通协作和结果交付意识`;
-
+      const bullets = [`${prefix}${action}${object}${suffix}`, `围绕${state.role.focus}完成基础信息整理与执行支持，沉淀细致核对、沟通协作和结果交付意识`];
       $('resumeSection').textContent = state.evaluation.score >= 80 ? '项目/实习经历' : '校园/项目经历';
-      $('resumeTitle').textContent = selectedTitle();
-      $('bulletList').innerHTML = [bullet1, bullet2].map((item) => `<li>${item}</li>`).join('');
-      $('reportList').innerHTML = [
-        `原始经历：${text}`,
-        `补充事实：${follow || '暂未补充，后续可以继续追问'}`,
-        `适合定位：${state.evaluation.level}`,
-        '不虚构边界：没有使用“主导、负责、显著提升”等缺少事实支撑的词',
-        '下一步：继续补充数量、周期、使用对象或真实反馈，让这张经历卡更扎实'
-      ].map((item) => `<li>${item}</li>`).join('');
-      $('resultSection').classList.remove('hidden');
-      setStep(4, $('resultSection'));
-    }
-
-    function selectedTitle() {
-      const first = state.selectedSeeds[0];
-      return seeds.find((seed) => seed.id === first)?.label || '经历整理与支持';
-    }
-
-    function fillExample() {
-      state.role = roles[2];
-      state.selectedSeeds = ['teacher', 'content'];
-      $('experienceInput').value = '我帮老师整理过学生名单和一些表格，后来老师拿去做统计。';
-      renderRoleChips();
-      renderSeedChips();
-      renderState();
-    }
-
-    function restart() {
-      state.step = 1;
-      state.name = '';
-      state.role = roles[0];
-      state.selectedSeeds = [];
-      state.evaluation = null;
-      $('nicknameInput').value = '';
-      $('experienceInput').value = '';
-      $('followupInput').value = '';
-      $('chatSection').classList.add('hidden');
-      $('evaluationSection').classList.add('hidden');
-      $('resultSection').classList.add('hidden');
-      renderRoleChips();
-      renderSeedChips();
-      renderState();
-      renderJourney();
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-
-    $('avatarInput').onchange = (event) => {
-      const file = event.target.files && event.target.files[0];
-      if (!file) return;
-      const reader = new FileReader();
-      reader.onload = () => {
-        state.avatar = reader.result;
-        syncAvatars();
-      };
-      reader.readAsDataURL(file);
+      $('resumeTitle').textContent = seeds.find(seed => seed.id === state.selectedSeeds[0])?.label || '经历整理与支持';
+      $('bulletList').innerHTML = bullets.map(item => `<li>${item}</li>`).join('');
+      $('reportList').innerHTML = [`原始经历：${text}`, `补充事实：${follow || '暂未补充，后续可以继续追问'}`, `适合定位：${state.evaluation.level}`, '不虚构边界：没有使用“主导、负责、显著提升”等缺少事实支撑的词', '下一步：继续补充数量、周期、使用对象或真实反馈，让这张经历卡更扎实'].map(item => `<li>${item}</li>`).join('');
+      unlock('resultPanel', 4);
     };
-
-    $('startBtn').onclick = startChat;
-    $('evaluateBtn').onclick = evaluate;
-    $('generateBtn').onclick = generate;
-    $('exampleBtn').onclick = fillExample;
-    $('restartBtn').onclick = restart;
-
-    renderJourney();
-    renderRoleChips();
-    renderSeedChips();
-    renderState();
-    syncAvatars();
+    $('restartBtn').onclick = () => location.reload();
+    document.querySelectorAll('.quest-card').forEach(card => card.onclick = () => {
+      if (card.classList.contains('locked')) return;
+      const panel = $(card.dataset.open);
+      panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+    renderRoute(); renderRoleChips(); renderSeedChips(); renderState(); syncAvatars();
   </script>
 </body>
 </html>
